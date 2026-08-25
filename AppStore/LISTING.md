@@ -51,6 +51,22 @@ Demo: open the app, skip or complete onboarding, tap Daily Rangoli → Start Dra
 
 Screenshots: upload `AppStore/Screenshots/iphone-6.9/` (1320×2868) and `AppStore/Screenshots/ipad-13/` (2064×2752), files `01`–`06` in that order.
 
-## Privacy nutrition label
+## Privacy nutrition label (App Store Connect)
 
-Device ID may be used by Google AdMob for third-party advertising. None of this is linked to an identity we hold.
+Privacy Policy URL: **https://sreedharlakshman2.github.io/traditional-rangoli/privacy.html**  
+User Privacy Choices URL: leave blank.
+
+**Do you or your third-party partners collect data from this app?**  
+Yes. Google AdMob (banner + interstitial) collects data. Drawings, XP, and ratings stay on device or go only to Apple.
+
+Declare these types. For each: **not linked** to the user’s identity, **used for tracking** (clears the `NSUserTrackingUsageDescription` warning), purpose **Third-Party Advertising**.
+
+**Data Used to Track You** (only if the user allows tracking)
+- Device ID
+- Advertising Data
+
+**Data Not Linked to You**
+- Device ID — Third-Party Advertising
+- Advertising Data — Third-Party Advertising
+
+Do **not** declare contact info, location, photos, user content, or purchases. Rangoli files never leave the device. StoreKit ratings go to Apple, not to Sai Laksha Technologies.

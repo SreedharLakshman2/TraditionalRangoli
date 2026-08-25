@@ -7,14 +7,17 @@
 
 ## Overview
 
-Traditional Rangoli is a rangoli and kolam learning app. Your drawings, favorites, and progress stay **on your device**. The app does not require an account. The app is free and shows **third-party ads**.
+Traditional Rangoli is a rangoli and kolam learning app for iPhone and iPad. Your drawings, favorites, and progress stay **on your device**. The app does not require an account. The app is free and shows **third-party ads**. Sai Laksha Technologies publishes it under the Sreeo Studio brand.
 
 ## Information stored on your device
 
 The app stores locally:
 
 - Rangoli drawings, thumbnails, and favorites (files in the app’s Documents folder)
-- XP, streak, completed patterns, sound, haptics, grid, onboarding, and local timestamps used to time Apple’s in-app rating prompt (UserDefaults)
+- XP, streak, completed patterns, sound, haptics, grid, and onboarding preferences (UserDefaults)
+- Local timestamps used only to decide when to show Apple’s rating prompt
+
+Ratings go through Apple’s StoreKit dialog. We do not receive your star rating or review text.
 
 This is **not** sent to Sai Laksha Technologies.
 
@@ -33,7 +36,8 @@ Google may collect a device identifier and related advertising data according to
 Google’s policy: https://policies.google.com/privacy  
 Google’s advertising page: https://policies.google.com/technologies/ads  
 
-Authorized sellers: https://sreedharlakshman2.github.io/app-ads.txt
+Authorized sellers: https://sreedharlakshman2.github.io/app-ads.txt  
+Matching ads.txt: https://sreedharlakshman2.github.io/ads.txt
 
 ## Information we do not collect ourselves
 
@@ -48,7 +52,11 @@ If you use Share, iOS’s share sheet may send the image you choose to the app y
 
 ## Children’s privacy
 
-The app is for a general audience including families. We do not knowingly collect personal information from children. Ads are provided by Google; we do not target children.
+The app is for a general audience including families. It is not in Apple’s Kids category. We do not knowingly collect personal information from children. Ads are provided by Google; we do not target children.
+
+## App Store privacy label
+
+Device ID and advertising data may be used by Google AdMob for third-party advertising. Device ID may be used to track you across apps if you allow tracking. None of this is linked to an identity we hold.
 
 ## Data retention and deletion
 
@@ -57,6 +65,7 @@ Delete the app to remove local drawings and progress.
 ## Contact
 
 **Sai Laksha Technologies**  
+Sreeo Studio  
 Developer: Sreedhar Lakshmanan  
 Support: https://sreedharlakshman2.github.io/traditional-rangoli/  
 Privacy: https://sreedharlakshman2.github.io/traditional-rangoli/privacy.html  
