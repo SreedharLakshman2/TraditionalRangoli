@@ -11,14 +11,13 @@ struct RangoliPreview: View {
             let t = animate ? loopProgress(timeline.date) : progress
             Canvas { context, size in
                 if floor {
-                    let rect = Path(roundedRect: CGRect(origin: .zero, size: size), cornerRadius: size.width * 0.18)
                     context.fill(
-                        rect,
+                        Path(CGRect(origin: .zero, size: size)),
                         with: .radialGradient(
-                            Gradient(colors: [RangoliColor.floorLight, RangoliColor.floorDeep]),
+                            Gradient(colors: [RangoliColor.floorLight, RangoliColor.floorMid, RangoliColor.floorDeep]),
                             center: CGPoint(x: size.width / 2, y: size.height / 2),
                             startRadius: 4,
-                            endRadius: size.width * 0.7
+                            endRadius: max(size.width, size.height) * 0.78
                         )
                     )
                 }

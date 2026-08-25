@@ -34,7 +34,8 @@ struct CompletionView: View {
                     .padding(.top, 20)
 
                 artworkView
-                    .frame(height: sizeClass == .regular ? 360 : 260)
+                    .aspectRatio(1, contentMode: .fit)
+                    .frame(maxWidth: sizeClass == .regular ? 420 : 280)
                     .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
                     .goldFrame(cornerRadius: 28)
                     .shadow(color: RangoliColor.gold.opacity(0.25), radius: 18, y: 8)

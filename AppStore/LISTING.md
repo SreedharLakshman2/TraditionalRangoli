@@ -49,6 +49,8 @@ Support email in App Review Information: **sreedharlakshmanan4@gmail.com**
 
 Demo: open the app, skip or complete onboarding, tap Daily Rangoli → Start Drawing, draw a stroke, tap Done, skip or color, then Save. On iPad, confirm Home shows two pattern columns and the studio canvas stays square in landscape.
 
+Screenshots: upload `AppStore/Screenshots/iphone-6.9/` (1320×2868) and `AppStore/Screenshots/ipad-13/` (2064×2752), files `01`–`06` in that order.
+
 ## Privacy nutrition label
 
 Device ID may be used by Google AdMob for third-party advertising. None of this is linked to an identity we hold.

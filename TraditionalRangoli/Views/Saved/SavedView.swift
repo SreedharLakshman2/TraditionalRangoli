@@ -69,9 +69,11 @@ struct SavedCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            preview
-                .frame(height: 120)
+            Color.clear
+                .aspectRatio(1, contentMode: .fit)
+                .overlay { preview }
                 .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                .clipped()
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(artwork.title)
@@ -112,14 +114,14 @@ struct ArtworkDetailView: View {
     @EnvironmentObject private var artworks: ArtworkStore
     @EnvironmentObject private var router: AppRouter
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var shareURL: URL?
 
     var body: some View {
         ScrollView {
             VStack(spacing: 16) {
                 preview
-                    .frame(height: sizeClass == .regular ? 420 : 320)
+                    .aspectRatio(1, contentMode: .fit)
+                    .frame(maxWidth: .infinity)
                     .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
                     .goldFrame(cornerRadius: 28)
                 Text(artwork.title)

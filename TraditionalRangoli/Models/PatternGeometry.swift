@@ -123,24 +123,25 @@ enum GeometryFactory {
 
     private static func diya() -> [MotifStroke] {
         var strokes: [MotifStroke] = []
-        let bowl = [
-            CGPoint(x: 0.32, y: 0.58),
-            CGPoint(x: 0.28, y: 0.66),
-            CGPoint(x: 0.38, y: 0.74),
-            CGPoint(x: 0.5, y: 0.76),
-            CGPoint(x: 0.62, y: 0.74),
-            CGPoint(x: 0.72, y: 0.66),
-            CGPoint(x: 0.68, y: 0.58),
-            CGPoint(x: 0.5, y: 0.6),
-            CGPoint(x: 0.32, y: 0.58)
-        ]
-        strokes.append(MotifStroke(id: 0, points: bowl, colorHex: 0xC45C2A, width: 2.6, closed: true))
-        strokes.append(petal(center: CGPoint(x: 0.5, y: 0.52), angle: -.pi / 2, distance: 0.02, length: 0.12, width: 0.045, color: 0xE3B23C))
-        for i in 0..<8 {
-            let a = CGFloat(i) / 8 * .pi * 2 - .pi / 2
-            strokes.append(petal(center: c, angle: a, distance: 0.28, length: 0.1, width: 0.04, color: 0x9B2C2C))
+        strokes.append(circle(center: c, radius: 0.44, color: 0xC89B3C, width: 2.0))
+        for i in 0..<12 {
+            let a = CGFloat(i) / 12 * .pi * 2 - .pi / 2
+            strokes.append(petal(
+                center: c,
+                angle: a,
+                distance: 0.22,
+                length: 0.16,
+                width: 0.036,
+                color: i % 2 == 0 ? 0x9B2C2C : 0xC45C2A
+            ))
         }
-        strokes.append(circle(center: c, radius: 0.44, color: 0xC89B3C, width: 1.7))
+        strokes.append(circle(center: c, radius: 0.20, color: 0x3F6B4F, width: 1.7))
+        let bowlCenter = CGPoint(x: 0.5, y: 0.56)
+        strokes.append(ellipse(center: bowlCenter, rx: 0.17, ry: 0.09, color: 0xC45C2A, width: 3.0))
+        strokes.append(ellipse(center: CGPoint(x: 0.5, y: 0.53), rx: 0.15, ry: 0.035, color: 0x9B2C2C, width: 2.2))
+        strokes.append(circle(center: CGPoint(x: 0.5, y: 0.54), radius: 0.045, color: 0xE8C56B, width: 1.8))
+        strokes.append(petal(center: CGPoint(x: 0.5, y: 0.50), angle: -.pi / 2, distance: 0.0, length: 0.16, width: 0.05, color: 0xE3B23C))
+        strokes.append(petal(center: CGPoint(x: 0.5, y: 0.48), angle: -.pi / 2, distance: 0.02, length: 0.09, width: 0.028, color: 0xFFF3C4))
         return numbered(strokes)
     }
 
@@ -329,13 +330,17 @@ enum GeometryFactory {
 
     private static func mangoLeaf() -> [MotifStroke] {
         var strokes: [MotifStroke] = []
-        for i in 0..<8 {
-            let a = CGFloat(i) / 8 * .pi * 2 - .pi / 2
-            strokes.append(leaf(center: c, angle: a, distance: 0.12, color: 0x3F6B4F))
+        strokes.append(circle(center: c, radius: 0.44, color: 0xC45C2A, width: 1.8))
+        for ring in 0..<2 {
+            let count = ring == 0 ? 8 : 10
+            let distance: CGFloat = ring == 0 ? 0.12 : 0.26
+            for i in 0..<count {
+                let a = CGFloat(i) / CGFloat(count) * .pi * 2 - .pi / 2 + (ring == 1 ? .pi / 10 : 0)
+                strokes.append(leaf(center: c, angle: a, distance: distance, color: ring == 0 ? 0x3F6B4F : 0x5C8A64))
+            }
         }
-        strokes.append(circle(center: c, radius: 0.1, color: 0xC89B3C, width: 2))
+        strokes.append(circle(center: c, radius: 0.1, color: 0xC89B3C, width: 2.2))
         strokes.append(star(center: c, points: 6, inner: 0.05, outer: 0.09, color: 0x9B2C2C, width: 1.8))
-        strokes.append(circle(center: c, radius: 0.42, color: 0xC45C2A, width: 1.6))
         return numbered(strokes)
     }
 
@@ -356,13 +361,17 @@ enum GeometryFactory {
     }
 
     private static func circle(center: CGPoint, radius: CGFloat, color: UInt32, width: CGFloat, filledHint: Bool = false) -> MotifStroke {
+        ellipse(center: center, rx: radius, ry: radius, color: color, width: filledHint ? width + 1 : width)
+    }
+
+    private static func ellipse(center: CGPoint, rx: CGFloat, ry: CGFloat, color: UInt32, width: CGFloat) -> MotifStroke {
         let samples = 48
         var points: [CGPoint] = []
         for i in 0...samples {
             let a = CGFloat(i) / CGFloat(samples) * .pi * 2
-            points.append(polar(center, radius, a))
+            points.append(CGPoint(x: center.x + cos(a) * rx, y: center.y + sin(a) * ry))
         }
-        return MotifStroke(id: 0, points: points, colorHex: color, width: filledHint ? width + 1 : width, closed: true)
+        return MotifStroke(id: 0, points: points, colorHex: color, width: width, closed: true)
     }
 
     private static func petal(center: CGPoint, angle: CGFloat, distance: CGFloat, length: CGFloat, width: CGFloat, color: UInt32) -> MotifStroke {

@@ -42,7 +42,7 @@ Support email: sreedharlakshmanan4@gmail.com
 
 Bundle ID: `com.sreedhar.TraditionalRangoli`
 
-Upload iPad screenshots (12.9" or 13") in App Store Connect in addition to iPhone.
+Upload iPhone 6.9" and iPad 13" posters from `AppStore/Screenshots/iphone-6.9/` and `AppStore/Screenshots/ipad-13/`. Rebuild with `bash AppStore/Screenshots/capture_simulator_screens.sh` then `python3 AppStore/Screenshots/compose_posters.py`.
 
 ## Support
 

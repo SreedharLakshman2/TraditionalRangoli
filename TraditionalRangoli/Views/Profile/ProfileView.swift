@@ -133,19 +133,46 @@ struct ProfileView: View {
     }
 
     private var about: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 0) {
             Text("About")
                 .font(RangoliFont.title(20))
+                .foregroundStyle(RangoliColor.ink)
+                .frame(maxWidth: .infinity, alignment: .leading)
             Text("\(RangoliColor.brand) is a courtyard companion for kolam and rangoli. Artwork stays on this device.")
                 .font(RangoliFont.body(15))
                 .foregroundStyle(RangoliColor.muted)
-            Link("Support", destination: RangoliColor.supportURL)
-            Link("Privacy Policy", destination: RangoliColor.privacyURL)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.top, 10)
+            aboutLink("Support", RangoliColor.supportURL)
+                .padding(.top, 14)
+            Divider()
+            aboutLink("Privacy Policy", RangoliColor.privacyURL)
             Text(RangoliColor.copyright)
                 .font(RangoliFont.caption(12))
                 .foregroundStyle(RangoliColor.muted)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.top, 16)
         }
-        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(18)
         .paperCard()
+    }
+
+    private func aboutLink(_ title: String, _ url: URL) -> some View {
+        Link(destination: url) {
+            HStack {
+                Text(title)
+                    .font(RangoliFont.headline(16))
+                    .foregroundStyle(RangoliColor.primary)
+                Spacer()
+                Image(systemName: "arrow.up.right")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(RangoliColor.gold)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.vertical, 12)
+            .contentShape(Rectangle())
+        }
     }
 }

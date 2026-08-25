@@ -6,6 +6,7 @@ struct LaunchSplashView: View {
     @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var drawn: CGFloat = 0
     @State private var glow = false
+    @State private var appear = false
 
     var body: some View {
         ZStack {
@@ -30,11 +31,21 @@ struct LaunchSplashView: View {
                         .foregroundStyle(RangoliColor.muted)
                 }
             }
+            .padding(.bottom, 72)
+
+            studioFooter
+                .opacity(appear ? 1 : 0)
+                .animation(reduceMotion ? nil : .easeOut(duration: 0.45).delay(0.35), value: appear)
+                .padding(.bottom, 36)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
         }
         .onAppear {
+            appear = true
             if reduceMotion {
                 drawn = 1
-                onFinished()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) {
+                    onFinished()
+                }
                 return
             }
             withAnimation(.easeInOut(duration: 1.35)) {
@@ -43,10 +54,40 @@ struct LaunchSplashView: View {
             withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
                 glow = true
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.8) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.1) {
                 onFinished()
             }
         }
-        .accessibilityLabel("Traditional Rangoli")
+        .accessibilityLabel("Traditional Rangoli. Sreeo Studio. \(RangoliColor.copyright)")
+    }
+
+    private var studioFooter: some View {
+        VStack(spacing: 8) {
+            sreeoTiles(size: 12, spacing: 4)
+            Text(RangoliColor.studio)
+                .font(.system(size: 13, weight: .black, design: .rounded))
+                .foregroundStyle(RangoliColor.studioWordmark)
+            Text(RangoliColor.copyright)
+                .font(RangoliFont.caption(12))
+                .foregroundStyle(RangoliColor.muted)
+                .accessibilityLabel("Copyright 2026 Sai Laksha Technologies")
+        }
+    }
+
+    private func sreeoTiles(size: CGFloat, spacing: CGFloat) -> some View {
+        HStack(spacing: spacing) {
+            ForEach(0..<4, id: \.self) { index in
+                RoundedRectangle(cornerRadius: size * 0.23, style: .continuous)
+                    .fill(RangoliColor.studioTiles[index])
+                    .frame(width: size, height: size)
+                    .offset(y: appear || reduceMotion ? 0 : -28)
+                    .opacity(appear ? 1 : 0)
+                    .animation(
+                        reduceMotion ? nil : .spring(response: 0.5, dampingFraction: 0.6).delay(0.12 + Double(index) * 0.1),
+                        value: appear
+                    )
+            }
+        }
+        .accessibilityHidden(true)
     }
 }

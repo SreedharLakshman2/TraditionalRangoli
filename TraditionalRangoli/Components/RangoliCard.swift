@@ -3,34 +3,31 @@ import SwiftUI
 struct RangoliCard: View {
     let pattern: RangoliPattern
     var large: Bool = false
-    @Environment(\.horizontalSizeClass) private var sizeClass
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: 12) {
             RangoliPreview(motif: pattern.motif, animate: large)
-                .frame(height: previewHeight)
-                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-                .overlay(GoldCornerFrame().padding(8))
+                .aspectRatio(1, contentMode: .fit)
+                .frame(maxWidth: .infinity)
+                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 20, style: .continuous)
+                        .stroke(RangoliColor.gold.opacity(0.35), lineWidth: 1)
+                )
             Text(pattern.title)
-                .font(RangoliFont.headline(large ? 17 : 15))
+                .font(RangoliFont.headline(large ? 18 : 16))
                 .foregroundStyle(RangoliColor.ink)
-                .lineLimit(1)
+                .lineLimit(2)
+                .minimumScaleFactor(0.9)
             HStack(spacing: 8) {
                 MetaChip(text: pattern.difficulty.title)
                 MetaChip(text: "\(pattern.estimatedMinutes) min")
             }
         }
-        .padding(12)
+        .padding(14)
         .paperCard(radius: RangoliRadius.lg)
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(pattern.title), \(pattern.difficulty.title), \(pattern.estimatedMinutes) minutes")
-    }
-
-    private var previewHeight: CGFloat {
-        if large {
-            return sizeClass == .regular ? 220 : 168
-        }
-        return 124
     }
 }
 

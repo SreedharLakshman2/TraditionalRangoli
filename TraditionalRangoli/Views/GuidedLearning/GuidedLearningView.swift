@@ -12,9 +12,18 @@ struct GuidedLearningView: View {
     @State private var completed: UserArtwork?
     @State private var strokeMark = 0
 
-    init(pattern: RangoliPattern) {
+    init(pattern: RangoliPattern, screenshotStep: Int? = nil) {
         self.pattern = pattern
-        _session = StateObject(wrappedValue: DrawingSession(studio: .dots, pattern: pattern, gridSize: pattern.gridSize, showGuides: true))
+        let session = DrawingSession(studio: .dots, pattern: pattern, gridSize: pattern.gridSize, showGuides: true)
+        var seeded = 0
+        if let screenshotStep {
+            let all = GeometryFactory.strokes(for: pattern.motif)
+            seeded = min(all.count, max(2, screenshotStep + 1))
+            session.apply(motifStrokes: Array(all.prefix(seeded)))
+        }
+        _session = StateObject(wrappedValue: session)
+        _stepIndex = State(initialValue: screenshotStep ?? 0)
+        _strokeMark = State(initialValue: seeded)
     }
 
     private var steps: [RangoliStep] { pattern.steps }

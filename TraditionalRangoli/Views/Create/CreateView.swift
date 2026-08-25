@@ -62,8 +62,8 @@ struct CreateView: View {
                 if sizeClass == .regular {
                     VStack(alignment: .leading, spacing: 14) {
                         RangoliPreview(motif: motif, animate: true)
+                            .aspectRatio(1, contentMode: .fit)
                             .frame(maxWidth: .infinity)
-                            .frame(height: 148)
                             .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
                         Text(title)
                             .font(RangoliFont.title(20))

@@ -128,6 +128,20 @@ final class SettingsStore: ObservableObject {
         }
         favoritePatternIds = ids
     }
+
+    func seedForScreenshots() {
+        hasSeenOnboarding = true
+        xp = 340
+        streak = 12
+        patternsCompleted = 9
+        completedPatternIds = ["lotus-dot", "peacock", "diya", "simple-flower", "mandala"]
+        favoritePatternIds = ["lotus-dot", "peacock", "diya", "onam-pookalam"]
+        favoriteStyle = "Lotus"
+        hapticsEnabled = false
+        soundEnabled = false
+        showGuides = true
+        defaultGrid = 9
+    }
 }
 
 @MainActor
@@ -186,6 +200,42 @@ final class ArtworkStore: ObservableObject {
         var copy = artwork
         copy.isFavorite.toggle()
         save(copy)
+    }
+
+    func seedScreenshots() {
+        for art in artworks {
+            delete(art)
+        }
+        let samples: [(String, MotifKind, Bool)] = [
+            ("Lotus Dot Rangoli", .lotusDot, true),
+            ("Peacock Rangoli", .peacock, true),
+            ("Diya Rangoli", .diya, false),
+            ("Onam Pookalam", .onamPookalam, true),
+            ("Festival Mandala", .mandala, true),
+            ("Pongal Pot", .pongalPot, false)
+        ]
+        for (index, sample) in samples.enumerated() {
+            let session = DrawingSession(studio: .template, showGuides: false)
+            session.apply(motifStrokes: GeometryFactory.strokes(for: sample.1))
+            if sample.2 && index == 0 {
+                session.applyFestivalFills()
+            }
+            let art = UserArtwork(
+                id: UUID(),
+                title: sample.0,
+                createdDate: Date().addingTimeInterval(TimeInterval(-86400 * (index + 1))),
+                updatedDate: Date().addingTimeInterval(TimeInterval(-3600 * index)),
+                patternId: PatternCatalog.all.first(where: { $0.motif == sample.1 })?.id,
+                studio: .template,
+                gridSize: 9,
+                strokes: session.strokes,
+                fills: session.fills,
+                thumbnailPNG: ArtworkSnapshot.png(session: session),
+                isFavorite: sample.2,
+                colors: Array(Set(session.strokes.map(\.colorHex)))
+            )
+            save(art)
+        }
     }
 
     private func persist(_ artwork: UserArtwork) {

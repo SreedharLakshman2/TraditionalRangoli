@@ -87,12 +87,12 @@ struct ExploreView: View {
     }
 
     private var results: some View {
-        LazyVGrid(columns: CourtyardLayout.patternColumns(regular: sizeClass == .regular), spacing: 12) {
+        LazyVGrid(columns: CourtyardLayout.patternColumns(regular: sizeClass == .regular), spacing: 16) {
             ForEach(PatternCatalog.search(query)) { pattern in
                 NavigationLink {
                     PatternDetailView(pattern: pattern)
                 } label: {
-                    RangoliCard(pattern: pattern, large: sizeClass == .regular)
+                    RangoliCard(pattern: pattern, large: true)
                 }
                 .buttonStyle(PressScaleStyle(amount: 0.985))
             }
@@ -129,7 +129,7 @@ struct PatternGridView: View {
 
     var body: some View {
         ScrollView {
-            LazyVGrid(columns: CourtyardLayout.patternColumns(regular: sizeClass == .regular), spacing: 14) {
+            LazyVGrid(columns: CourtyardLayout.patternColumns(regular: sizeClass == .regular), spacing: 16) {
                 ForEach(patterns) { pattern in
                     NavigationLink {
                         PatternDetailView(pattern: pattern)

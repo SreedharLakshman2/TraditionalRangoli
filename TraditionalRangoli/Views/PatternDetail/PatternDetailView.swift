@@ -4,14 +4,14 @@ struct PatternDetailView: View {
     let pattern: RangoliPattern
     @EnvironmentObject private var router: AppRouter
     @EnvironmentObject private var settings: SettingsStore
-    @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var heart = false
 
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 20) {
                 RangoliPreview(motif: pattern.motif, animate: true)
-                    .frame(height: sizeClass == .regular ? 360 : 280)
+                    .aspectRatio(1, contentMode: .fit)
+                    .frame(maxWidth: .infinity)
                     .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
                     .overlay(GoldCornerFrame().padding(12))
                     .goldFrame(cornerRadius: 28)

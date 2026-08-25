@@ -63,7 +63,8 @@ struct HomeView: View {
                     MetaChip(text: daily.difficulty.title)
                 }
                 RangoliPreview(motif: daily.motif, animate: true)
-                    .frame(height: sizeClass == .regular ? 280 : 210)
+                    .aspectRatio(1, contentMode: .fit)
+                    .frame(maxWidth: .infinity)
                     .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
                     .overlay(GoldCornerFrame().padding(10))
                 Text(daily.title)
@@ -134,7 +135,7 @@ struct HomeView: View {
     private var popular: some View {
         VStack(alignment: .leading, spacing: 14) {
             SectionHeader(title: "Popular Patterns", subtitle: "Large, slow-drawn courtyard pieces")
-            LazyVGrid(columns: CourtyardLayout.patternColumns(regular: sizeClass == .regular), spacing: 14) {
+            LazyVGrid(columns: CourtyardLayout.patternColumns(regular: sizeClass == .regular), spacing: 16) {
                 ForEach(PatternCatalog.popular) { pattern in
                     NavigationLink {
                         PatternDetailView(pattern: pattern)
@@ -163,7 +164,7 @@ struct CollectionListView: View {
 
     var body: some View {
         ScrollView {
-            LazyVGrid(columns: CourtyardLayout.patternColumns(regular: sizeClass == .regular), spacing: 14) {
+            LazyVGrid(columns: CourtyardLayout.patternColumns(regular: sizeClass == .regular), spacing: 16) {
                 ForEach(PatternCatalog.matching(collection)) { pattern in
                     NavigationLink {
                         PatternDetailView(pattern: pattern)

@@ -25,11 +25,19 @@ enum RangoliColor {
 
     static let brand = "Traditional Rangoli"
     static let company = "Sai Laksha Technologies"
+    static let studio = "Sreeo Studio"
     static let developer = "Sreedhar Lakshmanan"
     static let copyright = "© 2026 Sai Laksha Technologies"
     static let supportURL = URL(string: "https://sreedharlakshman2.github.io/traditional-rangoli/")!
     static let privacyURL = URL(string: "https://sreedharlakshman2.github.io/traditional-rangoli/privacy.html")!
     static let marketingURL = URL(string: "https://sreedharlakshman2.github.io")!
+
+    static let studioTiles: [Color] = [.cyan, .purple, .pink, .orange]
+    static let studioWordmark = LinearGradient(
+        colors: [.cyan, .purple, .pink, .orange],
+        startPoint: .leading,
+        endPoint: .trailing
+    )
 }
 
 enum RangoliFont {
@@ -235,7 +243,7 @@ extension EnvironmentValues {
 enum CourtyardLayout {
     static func patternColumns(regular: Bool) -> [GridItem] {
         let count = regular ? 2 : 1
-        return Array(repeating: GridItem(.flexible(), spacing: 14), count: count)
+        return Array(repeating: GridItem(.flexible(), spacing: 16), count: count)
     }
 
     static func galleryColumns(regular: Bool) -> [GridItem] {

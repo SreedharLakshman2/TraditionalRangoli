@@ -89,12 +89,14 @@ struct RootView: View {
                     NavigationStack { ProfileView() }
                 }
             }
-            .padding(.bottom, 72 + AdBannerSlot.height)
+            .padding(.bottom, ScreenshotLaunch.isActive ? 72 : 72 + AdBannerSlot.height)
 
             VStack(spacing: 4) {
                 CustomTabBar(selection: $router.tab)
                     .frame(maxWidth: 560)
-                AdBannerSlot()
+                if !ScreenshotLaunch.isActive {
+                    AdBannerSlot()
+                }
             }
         }
         .fullScreenCover(item: $router.studio) { route in

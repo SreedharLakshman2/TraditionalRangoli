@@ -144,6 +144,35 @@ final class DrawingSession: ObservableObject {
         pattern = artwork.patternId.flatMap(PatternCatalog.pattern(id:))
     }
 
+    func apply(motifStrokes: [MotifStroke]) {
+        strokes = motifStrokes.map { stroke in
+            DrawStroke(
+                points: stroke.points.map(Point2D.init),
+                colorHex: stroke.colorHex,
+                width: max(2.6, stroke.width * 1.12),
+                tool: .brush,
+                symmetry: .none
+            )
+        }
+        undoneStrokes.removeAll()
+    }
+
+    func applyFestivalFills() {
+        fills = [
+            FillBlob(center: Point2D(x: 0.50, y: 0.50), colorHex: 0xC89B3C, radius: 0.07, kind: .fill),
+            FillBlob(center: Point2D(x: 0.33, y: 0.30), colorHex: 0x9B2C2C, radius: 0.05, kind: .flower),
+            FillBlob(center: Point2D(x: 0.67, y: 0.30), colorHex: 0xC45C2A, radius: 0.05, kind: .flower),
+            FillBlob(center: Point2D(x: 0.24, y: 0.52), colorHex: 0xF7F1E3, radius: 0.034, kind: .rice),
+            FillBlob(center: Point2D(x: 0.76, y: 0.52), colorHex: 0xF7F1E3, radius: 0.034, kind: .rice),
+            FillBlob(center: Point2D(x: 0.38, y: 0.74), colorHex: 0xE8C56B, radius: 0.042, kind: .diya),
+            FillBlob(center: Point2D(x: 0.50, y: 0.80), colorHex: 0xD97706, radius: 0.048, kind: .diya),
+            FillBlob(center: Point2D(x: 0.62, y: 0.74), colorHex: 0xE8C56B, radius: 0.042, kind: .diya),
+            FillBlob(center: Point2D(x: 0.50, y: 0.22), colorHex: 0x5C8A64, radius: 0.03, kind: .dots)
+        ]
+        undoneFills.removeAll()
+        tool = .flower
+    }
+
     private func addFill(at point: CGPoint, in size: CGSize) {
         let normalized = DrawingUtilities.normalized(point, in: size)
         let radius: Double

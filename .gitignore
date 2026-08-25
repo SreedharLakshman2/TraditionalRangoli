@@ -1,8 +1,9 @@
 .DS_Store
 xcuserdata/
 DerivedData/
+.store-derived/
 *.xcuserstate
 .build/
-.store-derived/
 *.ipa
 *.dSYM.zip
+AppStore/Screenshots/raw/
