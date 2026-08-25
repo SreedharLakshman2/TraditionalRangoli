@@ -139,7 +139,6 @@ struct ProfileView: View {
                 .foregroundStyle(RangoliColor.muted)
             Link("Support", destination: RangoliColor.supportURL)
             Link("Privacy Policy", destination: RangoliColor.privacyURL)
-            Link(RangoliColor.supportEmail, destination: URL(string: "mailto:\(RangoliColor.supportEmail)")!)
             Text(RangoliColor.copyright)
                 .font(RangoliFont.caption(12))
                 .foregroundStyle(RangoliColor.muted)

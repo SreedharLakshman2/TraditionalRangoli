@@ -27,7 +27,6 @@ enum RangoliColor {
     static let company = "Sai Laksha Technologies"
     static let developer = "Sreedhar Lakshmanan"
     static let copyright = "© 2026 Sai Laksha Technologies"
-    static let supportEmail = "sreedharlakshmanan4@gmail.com"
     static let supportURL = URL(string: "https://sreedharlakshman2.github.io/traditional-rangoli/")!
     static let privacyURL = URL(string: "https://sreedharlakshman2.github.io/traditional-rangoli/privacy.html")!
     static let marketingURL = URL(string: "https://sreedharlakshman2.github.io")!
