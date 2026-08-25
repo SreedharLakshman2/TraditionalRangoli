@@ -4,35 +4,50 @@ struct DrawingStudioView: View {
     @StateObject var session: DrawingSession
     @EnvironmentObject private var settings: SettingsStore
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var showMore = false
     @State private var coloring = false
     @State private var completed: UserArtwork?
     @State private var shareURL: URL?
 
     var body: some View {
-        ZStack {
-            PaperBackground(showWatermark: false)
-            VStack(spacing: 12) {
-                topBar
-                DrawingCanvas(session: session)
-                    .padding(.horizontal, 16)
-                    .frame(maxHeight: .infinity)
-                if session.studio == .dots || session.studio == .template {
-                    gridPicker
+        GeometryReader { geo in
+            let split = CourtyardLayout.splitStudio(
+                width: geo.size.width,
+                height: geo.size.height,
+                regular: sizeClass == .regular
+            )
+            ZStack {
+                PaperBackground(showWatermark: false)
+                VStack(spacing: split ? 8 : 12) {
+                    topBar
+                    if split {
+                        HStack(alignment: .center, spacing: 8) {
+                            DrawingCanvas(session: session)
+                                .padding(.leading, 16)
+                                .padding(.bottom, 12)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            VStack(spacing: 12) {
+                                toolsColumn
+                                Spacer(minLength: 0)
+                            }
+                            .frame(width: min(360, max(280, geo.size.width * 0.34)))
+                            .padding(.trailing, 16)
+                            .padding(.bottom, 12)
+                        }
+                    } else {
+                        DrawingCanvas(session: session)
+                            .padding(.horizontal, 16)
+                            .frame(maxHeight: .infinity)
+                        toolsColumn
+                            .padding(.bottom, 8)
+                    }
                 }
-                toolbar
-                ColorPaletteBar(selection: $session.color)
-                    .padding(.horizontal, 16)
-                RangoliPrimaryButton(title: "Done", icon: "checkmark") {
-                    coloring = true
-                }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 8)
+                .padding(.top, 8)
             }
-            .padding(.top, 8)
         }
         .preferredColorScheme(.light)
-        .sheet(isPresented: $coloring) {
+        .fullScreenCover(isPresented: $coloring) {
             ColoringView(session: session) {
                 coloring = false
                 finish()
@@ -87,6 +102,23 @@ struct DrawingStudioView: View {
             .accessibilityLabel("More")
         }
         .padding(.horizontal, 16)
+    }
+
+    private var toolsColumn: some View {
+        VStack(spacing: 12) {
+            if session.studio == .dots || session.studio == .template {
+                gridPicker
+            }
+            toolbar
+            ColorPaletteBar(selection: $session.color)
+                .padding(.horizontal, 16)
+                .courtyardControls(640)
+            RangoliPrimaryButton(title: "Done", icon: "checkmark") {
+                coloring = true
+            }
+            .padding(.horizontal, 20)
+            .courtyardControls()
+        }
     }
 
     private var gridPicker: some View {

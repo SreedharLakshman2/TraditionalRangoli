@@ -93,6 +93,7 @@ struct RootView: View {
 
             VStack(spacing: 4) {
                 CustomTabBar(selection: $router.tab)
+                    .frame(maxWidth: 560)
                 AdBannerSlot()
             }
         }

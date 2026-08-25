@@ -44,19 +44,22 @@ struct KolamWatermark: View {
 
 struct ClayFloor: View {
     var body: some View {
-        ZStack {
-            RadialGradient(
-                colors: [RangoliColor.floorLight, RangoliColor.floorMid, RangoliColor.floorDeep],
-                center: .center,
-                startRadius: 10,
-                endRadius: 280
-            )
-            Canvas { context, size in
-                for i in 0..<70 {
-                    let x = CGFloat((i * 37) % 101) / 101 * size.width
-                    let y = CGFloat((i * 53) % 97) / 97 * size.height
-                    let grain = Path(ellipseIn: CGRect(x: x, y: y, width: 2.2, height: 1.4))
-                    context.fill(grain, with: .color(Color.black.opacity(0.08)))
+        GeometryReader { geo in
+            let radius = max(geo.size.width, geo.size.height) * 0.72
+            ZStack {
+                RadialGradient(
+                    colors: [RangoliColor.floorLight, RangoliColor.floorMid, RangoliColor.floorDeep],
+                    center: .center,
+                    startRadius: 10,
+                    endRadius: radius
+                )
+                Canvas { context, size in
+                    for i in 0..<70 {
+                        let x = CGFloat((i * 37) % 101) / 101 * size.width
+                        let y = CGFloat((i * 53) % 97) / 97 * size.height
+                        let grain = Path(ellipseIn: CGRect(x: x, y: y, width: 2.2, height: 1.4))
+                        context.fill(grain, with: .color(Color.black.opacity(0.08)))
+                    }
                 }
             }
         }

@@ -10,6 +10,7 @@ struct CompletionView: View {
     @EnvironmentObject private var artworks: ArtworkStore
     @EnvironmentObject private var router: AppRouter
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var shownXP = 0
     @State private var petals = false
     @State private var saved = false
@@ -33,7 +34,7 @@ struct CompletionView: View {
                     .padding(.top, 20)
 
                 artworkView
-                    .frame(height: 260)
+                    .frame(height: sizeClass == .regular ? 360 : 260)
                     .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
                     .goldFrame(cornerRadius: 28)
                     .shadow(color: RangoliColor.gold.opacity(0.25), radius: 18, y: 8)
@@ -56,12 +57,14 @@ struct CompletionView: View {
                     Haptics.success(settings)
                 }
                 .padding(.horizontal, 24)
+                .courtyardControls()
 
                 if let url = shareURL {
                     ShareLink(item: url) {
                         labelChip("Share", "square.and.arrow.up")
                     }
                     .padding(.horizontal, 24)
+                    .courtyardControls()
                 }
 
                 RangoliSecondaryButton(title: "Create Another", icon: "plus") {
@@ -69,6 +72,7 @@ struct CompletionView: View {
                     router.tab = .create
                 }
                 .padding(.horizontal, 24)
+                .courtyardControls()
 
                 Button {
                     var copy = artwork
@@ -82,6 +86,7 @@ struct CompletionView: View {
                 }
                 .padding(.bottom, 12)
             }
+            .courtyardColumn()
         }
         .preferredColorScheme(.light)
         .onAppear {

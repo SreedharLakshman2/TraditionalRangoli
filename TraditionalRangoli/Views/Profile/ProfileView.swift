@@ -3,6 +3,7 @@ import SwiftUI
 struct ProfileView: View {
     @EnvironmentObject private var settings: SettingsStore
     @EnvironmentObject private var artworks: ArtworkStore
+    @Environment(\.horizontalSizeClass) private var sizeClass
 
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -16,6 +17,7 @@ struct ProfileView: View {
             }
             .padding(20)
             .padding(.bottom, 12)
+            .courtyardColumn()
         }
         .toolbar(.hidden, for: .navigationBar)
     }
@@ -71,7 +73,7 @@ struct ProfileView: View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Achievements")
                 .font(RangoliFont.title(20))
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
+            LazyVGrid(columns: CourtyardLayout.achievementColumns(regular: sizeClass == .regular), spacing: 10) {
                 badge("🪷", "First Rangoli", unlocked: settings.patternsCompleted >= 1)
                 badge("🌸", "5 Patterns", unlocked: settings.patternsCompleted >= 5)
                 badge("🔥", "7 Day Streak", unlocked: settings.streak >= 7)
@@ -134,7 +136,7 @@ struct ProfileView: View {
         VStack(alignment: .leading, spacing: 8) {
             Text("About")
                 .font(RangoliFont.title(20))
-            Text("\(RangoliColor.brand) is a courtyard companion for kolam and rangoli. Artwork stays on this iPhone.")
+            Text("\(RangoliColor.brand) is a courtyard companion for kolam and rangoli. Artwork stays on this device.")
                 .font(RangoliFont.body(15))
                 .foregroundStyle(RangoliColor.muted)
             Link("Support", destination: RangoliColor.supportURL)

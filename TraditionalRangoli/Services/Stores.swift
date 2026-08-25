@@ -198,8 +198,10 @@ final class ArtworkStore: ObservableObject {
     private func loadAll() {
         guard let files = try? FileManager.default.contentsOfDirectory(at: folder, includingPropertiesForKeys: nil) else { return }
         artworks = files.compactMap { url in
-            guard let data = try? Data(contentsOf: url) else { return nil }
-            return try? decoder.decode(UserArtwork.self, from: data)
+            guard let data = try? Data(contentsOf: url),
+                  var art = try? decoder.decode(UserArtwork.self, from: data) else { return nil }
+            art.strokes = DrawingUtilities.normalizedStrokes(art.strokes)
+            return art
         }
         .sorted { $0.updatedDate > $1.updatedDate }
     }

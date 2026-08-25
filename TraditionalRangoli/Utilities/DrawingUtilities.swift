@@ -81,15 +81,30 @@ enum DrawingUtilities {
 
     static func strokeCloseness(user: [CGPoint], target: [CGPoint], in size: CGSize) -> CGFloat {
         guard !user.isEmpty, !target.isEmpty else { return 0 }
+        let mappedUser = user.map { point in
+            point.x <= 1.2 && point.y <= 1.2 ? mapped(point, in: size) : point
+        }
         let mappedTarget = target.map { mapped($0, in: size) }
         let sample = stride(from: 0, to: mappedTarget.count, by: max(1, mappedTarget.count / 18)).map { mappedTarget[$0] }
         var hits = 0
         let threshold = min(size.width, size.height) * 0.11
         for goal in sample {
-            if user.contains(where: { hypot($0.x - goal.x, $0.y - goal.y) < threshold }) {
+            if mappedUser.contains(where: { hypot($0.x - goal.x, $0.y - goal.y) < threshold }) {
                 hits += 1
             }
         }
         return CGFloat(hits) / CGFloat(max(sample.count, 1))
+    }
+
+    /// Older drawings stored pixel coordinates. New strokes are 0...1 of the square canvas.
+    static func normalizedStrokes(_ strokes: [DrawStroke]) -> [DrawStroke] {
+        let coords = strokes.flatMap(\.points)
+        guard let maxV = coords.map({ max($0.x, $0.y) }).max(), maxV > 1.2 else { return strokes }
+        let scale = max(320, maxV)
+        return strokes.map { stroke in
+            var copy = stroke
+            copy.points = stroke.points.map { Point2D(x: $0.x / scale, y: $0.y / scale) }
+            return copy
+        }
     }
 }

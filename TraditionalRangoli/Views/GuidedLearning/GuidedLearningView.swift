@@ -5,6 +5,7 @@ struct GuidedLearningView: View {
     @StateObject private var session: DrawingSession
     @EnvironmentObject private var settings: SettingsStore
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var stepIndex = 0
     @State private var successPulse = false
     @State private var hint: String?
@@ -20,55 +21,43 @@ struct GuidedLearningView: View {
     private var total: Int { max(steps.count, 1) }
 
     var body: some View {
-        ZStack {
-            PaperBackground(showWatermark: false)
-            VStack(spacing: 12) {
-                header
-                progressDots
-                DrawingCanvas(session: session)
-                    .padding(.horizontal, 16)
-                    .overlay {
-                        if successPulse {
-                            RoundedRectangle(cornerRadius: 28, style: .continuous)
-                                .stroke(RangoliColor.gold, lineWidth: 3)
-                                .padding(.horizontal, 16)
+        GeometryReader { geo in
+            let split = CourtyardLayout.splitStudio(
+                width: geo.size.width,
+                height: geo.size.height,
+                regular: sizeClass == .regular
+            )
+            ZStack {
+                PaperBackground(showWatermark: false)
+                VStack(spacing: split ? 8 : 12) {
+                    header
+                    progressDots
+                    if split {
+                        HStack(alignment: .center, spacing: 8) {
+                            canvas
+                                .padding(.leading, 16)
+                                .padding(.bottom, 12)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            VStack(spacing: 16) {
+                                stepCopy
+                                navButtons
+                                Spacer(minLength: 0)
+                            }
+                            .frame(width: min(360, max(280, geo.size.width * 0.34)))
+                            .padding(.trailing, 16)
+                            .padding(.bottom, 12)
                         }
-                    }
-                    .onChange(of: session.strokes.count) { _, count in
-                        if count > strokeMark {
-                            strokeMark = count
-                            validateLatest()
-                        }
-                    }
-
-                Text("STEP \(stepIndex + 1) OF \(total)")
-                    .font(RangoliFont.label(12))
-                    .tracking(1.4)
-                    .foregroundStyle(RangoliColor.gold)
-                Text(hint ?? (steps.indices.contains(stepIndex) ? steps[stepIndex].instruction : "Trace the faint stroke."))
-                    .font(RangoliFont.body(16))
-                    .foregroundStyle(RangoliColor.ink)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 24)
-                    .frame(minHeight: 64)
-
-                HStack(spacing: 12) {
-                    RangoliSecondaryButton(title: "Back") {
-                        if stepIndex == 0 {
-                            dismiss()
-                        } else {
-                            stepIndex -= 1
-                            hint = nil
-                        }
-                    }
-                    RangoliPrimaryButton(title: stepIndex == total - 1 ? "Finish" : "Next") {
-                        advance()
+                    } else {
+                        canvas
+                            .padding(.horizontal, 16)
+                            .frame(maxHeight: .infinity)
+                        stepCopy
+                        navButtons
+                            .padding(.bottom, 10)
                     }
                 }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 10)
+                .padding(.top, 8)
             }
-            .padding(.top, 8)
         }
         .preferredColorScheme(.light)
         .fullScreenCover(item: $completed) { art in
@@ -77,6 +66,56 @@ struct GuidedLearningView: View {
                 dismiss()
             }
         }
+    }
+
+    private var canvas: some View {
+        DrawingCanvas(session: session)
+            .overlay {
+                if successPulse {
+                    RoundedRectangle(cornerRadius: 28, style: .continuous)
+                        .stroke(RangoliColor.gold, lineWidth: 3)
+                        .padding(2)
+                }
+            }
+            .onChange(of: session.strokes.count) { _, count in
+                if count > strokeMark {
+                    strokeMark = count
+                    validateLatest()
+                }
+            }
+    }
+
+    private var stepCopy: some View {
+        VStack(spacing: 10) {
+            Text("STEP \(stepIndex + 1) OF \(total)")
+                .font(RangoliFont.label(12))
+                .tracking(1.4)
+                .foregroundStyle(RangoliColor.gold)
+            Text(hint ?? (steps.indices.contains(stepIndex) ? steps[stepIndex].instruction : "Trace the faint stroke."))
+                .font(RangoliFont.body(16))
+                .foregroundStyle(RangoliColor.ink)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 8)
+                .frame(minHeight: 64)
+        }
+    }
+
+    private var navButtons: some View {
+        HStack(spacing: 12) {
+            RangoliSecondaryButton(title: "Back") {
+                if stepIndex == 0 {
+                    dismiss()
+                } else {
+                    stepIndex -= 1
+                    hint = nil
+                }
+            }
+            RangoliPrimaryButton(title: stepIndex == total - 1 ? "Finish" : "Next") {
+                advance()
+            }
+        }
+        .padding(.horizontal, 20)
+        .courtyardControls(560)
     }
 
     private var header: some View {
@@ -116,7 +155,7 @@ struct GuidedLearningView: View {
         }
         let goal = target[steps[stepIndex].strokeIndex].points
         let user = session.strokes.last.map { $0.points.map(\.cg) } ?? []
-        let canvas = CGSize(width: 320, height: 320)
+        let canvas = session.canvasSize.width > 1 ? session.canvasSize : CGSize(width: 320, height: 320)
         let score = DrawingUtilities.strokeCloseness(user: user, target: goal, in: canvas)
         if score >= 0.32 {
             Haptics.success(settings)

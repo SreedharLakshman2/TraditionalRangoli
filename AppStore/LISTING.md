@@ -9,7 +9,7 @@
 
 ## Promotional text
 
-Draw living rangoli on a clay courtyard floor. Trace lotus, pulli kolam and festival patterns with real symmetry — then save your powder art on this iPhone.
+Draw living rangoli on a clay courtyard floor. Trace lotus, pulli kolam and festival patterns with real symmetry — then save your powder art on this iPhone or iPad.
 
 ## Description
 
@@ -25,6 +25,8 @@ Discover lotus, peacock, diya, mandala, Pongal and Onam patterns. Learn each one
 • XP journey, streaks, and courtyard achievements  
 
 Artwork stays on your device. No account. A banner sits on the main tabs, and a full-screen ad may appear after you finish a rangoli.
+
+Works on iPhone (portrait) and iPad (portrait and landscape).
 
 Sai Laksha Technologies  
 sreedharlakshmanan4@gmail.com
@@ -45,7 +47,7 @@ https://sreedharlakshman2.github.io/traditional-rangoli/privacy.html
 
 Support email in App Review Information: **sreedharlakshmanan4@gmail.com**
 
-Demo: open the app, skip or complete onboarding, tap Daily Rangoli → Start Drawing, draw a stroke, tap Done, skip or color, then Save.
+Demo: open the app, skip or complete onboarding, tap Daily Rangoli → Start Drawing, draw a stroke, tap Done, skip or color, then Save. On iPad, confirm Home shows two pattern columns and the studio canvas stays square in landscape.
 
 ## Privacy nutrition label
 

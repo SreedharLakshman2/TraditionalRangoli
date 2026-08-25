@@ -207,4 +207,59 @@ extension View {
             .goldFrame(cornerRadius: radius)
             .shadow(color: Color.black.opacity(0.06), radius: 16, y: 8)
     }
+
+    /// Keeps copy and cards from stretching edge-to-edge on iPad.
+    func courtyardColumn(_ maxWidth: CGFloat = 780) -> some View {
+        frame(maxWidth: maxWidth)
+            .frame(maxWidth: .infinity)
+    }
+
+    /// Caps primary actions so they stay pill-shaped on a wide iPad.
+    func courtyardControls(_ maxWidth: CGFloat = 480) -> some View {
+        frame(maxWidth: maxWidth)
+            .frame(maxWidth: .infinity)
+    }
+}
+
+private struct CategoryCardExpandedKey: EnvironmentKey {
+    static let defaultValue = false
+}
+
+extension EnvironmentValues {
+    var courtyardExpandedCards: Bool {
+        get { self[CategoryCardExpandedKey.self] }
+        set { self[CategoryCardExpandedKey.self] = newValue }
+    }
+}
+
+enum CourtyardLayout {
+    static func patternColumns(regular: Bool) -> [GridItem] {
+        let count = regular ? 2 : 1
+        return Array(repeating: GridItem(.flexible(), spacing: 14), count: count)
+    }
+
+    static func galleryColumns(regular: Bool) -> [GridItem] {
+        let count = regular ? 3 : 2
+        return Array(repeating: GridItem(.flexible(), spacing: 12), count: count)
+    }
+
+    static func categoryColumns(regular: Bool) -> [GridItem] {
+        let count = regular ? 4 : 2
+        return Array(repeating: GridItem(.flexible(), spacing: 12), count: count)
+    }
+
+    static func achievementColumns(regular: Bool) -> [GridItem] {
+        let count = regular ? 4 : 2
+        return Array(repeating: GridItem(.flexible()), count: count)
+    }
+
+    static func createColumns(regular: Bool) -> [GridItem] {
+        let count = regular ? 3 : 1
+        return Array(repeating: GridItem(.flexible(), spacing: 16), count: count)
+    }
+
+    /// iPad landscape (and similarly wide regular-width scenes): tools sit beside a square canvas.
+    static func splitStudio(width: CGFloat, height: CGFloat, regular: Bool) -> Bool {
+        regular && width > height + 40
+    }
 }

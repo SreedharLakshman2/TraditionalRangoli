@@ -3,11 +3,12 @@ import SwiftUI
 struct RangoliCard: View {
     let pattern: RangoliPattern
     var large: Bool = false
+    @Environment(\.horizontalSizeClass) private var sizeClass
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             RangoliPreview(motif: pattern.motif, animate: large)
-                .frame(height: large ? 168 : 124)
+                .frame(height: previewHeight)
                 .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
                 .overlay(GoldCornerFrame().padding(8))
             Text(pattern.title)
@@ -24,12 +25,20 @@ struct RangoliCard: View {
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(pattern.title), \(pattern.difficulty.title), \(pattern.estimatedMinutes) minutes")
     }
+
+    private var previewHeight: CGFloat {
+        if large {
+            return sizeClass == .regular ? 220 : 168
+        }
+        return 124
+    }
 }
 
 struct CategoryCard: View {
     let title: String
     let symbol: String
     var motif: MotifKind
+    @Environment(\.courtyardExpandedCards) private var expanded
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -48,7 +57,8 @@ struct CategoryCard: View {
                 .minimumScaleFactor(0.85)
         }
         .padding(14)
-        .frame(width: 148, height: 118, alignment: .topLeading)
+        .frame(width: expanded ? nil : 148, height: 118, alignment: .topLeading)
+        .frame(maxWidth: expanded ? .infinity : 148, alignment: .topLeading)
         .paperCard(radius: RangoliRadius.md)
     }
 }

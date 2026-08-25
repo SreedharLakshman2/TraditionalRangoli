@@ -4,13 +4,14 @@ struct PatternDetailView: View {
     let pattern: RangoliPattern
     @EnvironmentObject private var router: AppRouter
     @EnvironmentObject private var settings: SettingsStore
+    @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var heart = false
 
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 20) {
                 RangoliPreview(motif: pattern.motif, animate: true)
-                    .frame(height: 280)
+                    .frame(height: sizeClass == .regular ? 360 : 280)
                     .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
                     .overlay(GoldCornerFrame().padding(12))
                     .goldFrame(cornerRadius: 28)
@@ -35,9 +36,11 @@ struct PatternDetailView: View {
                 RangoliPrimaryButton(title: "Learn Step-by-Step", icon: "hand.draw") {
                     router.studio = StudioRoute(kind: .guided(pattern))
                 }
+                .courtyardControls()
                 RangoliSecondaryButton(title: "Start Drawing", icon: "pencil.tip") {
                     router.studio = StudioRoute(kind: .dots(pattern))
                 }
+                .courtyardControls()
                 Button {
                     withAnimation(.spring(response: 0.32, dampingFraction: 0.55)) {
                         settings.toggleFavorite(patternId: pattern.id)
@@ -56,11 +59,13 @@ struct PatternDetailView: View {
                     .padding(.vertical, 12)
                 }
                 .buttonStyle(PressScaleStyle())
+                .courtyardControls()
 
                 inside
             }
             .padding(20)
             .padding(.bottom, 16)
+            .courtyardColumn()
         }
         .background(PaperBackground(showWatermark: false).ignoresSafeArea())
         .navigationBarTitleDisplayMode(.inline)

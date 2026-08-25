@@ -88,15 +88,17 @@ struct ArtworkRenderer: View {
                 drawStroke(stroke, context: &context, size: size, center: center)
             }
             if livePoints.count > 1 {
-                let copies = SymmetryEngine.copies(of: livePoints, mode: liveSymmetry, center: center)
+                let mappedLive = livePoints.map { DrawingUtilities.mapped($0, in: size) }
+                let copies = SymmetryEngine.copies(of: mappedLive, mode: liveSymmetry, center: center)
+                let width = scaledWidth(liveWidth, in: size)
                 for points in copies {
                     let path = DrawingUtilities.smoothPath(points: points)
                     if liveTool == .eraser {
                         context.blendMode = .destinationOut
-                        context.stroke(path, with: .color(.white), style: StrokeStyle(lineWidth: liveWidth * 1.8, lineCap: .round, lineJoin: .round))
+                        context.stroke(path, with: .color(.white), style: StrokeStyle(lineWidth: width * 1.8, lineCap: .round, lineJoin: .round))
                         context.blendMode = .normal
                     } else {
-                        context.stroke(path, with: .color(liveColor), style: StrokeStyle(lineWidth: liveWidth, lineCap: .round, lineJoin: .round))
+                        context.stroke(path, with: .color(liveColor), style: StrokeStyle(lineWidth: width, lineCap: .round, lineJoin: .round))
                     }
                 }
             }
@@ -105,8 +107,9 @@ struct ArtworkRenderer: View {
 
     private func drawGrid(context: inout GraphicsContext, size: CGSize) {
         let dots = DrawingUtilities.gridPoints(size: gridSize, in: size)
+        let r = max(2.2, min(size.width, size.height) * 0.007)
         for dot in dots {
-            let rect = CGRect(x: dot.x - 2.2, y: dot.y - 2.2, width: 4.4, height: 4.4)
+            let rect = CGRect(x: dot.x - r, y: dot.y - r, width: r * 2, height: r * 2)
             context.fill(Path(ellipseIn: rect), with: .color(RangoliColor.rice.opacity(0.55)))
         }
     }
@@ -132,22 +135,27 @@ struct ArtworkRenderer: View {
     }
 
     private func drawStroke(_ stroke: DrawStroke, context: inout GraphicsContext, size: CGSize, center: CGPoint) {
-        let points = stroke.points.map(\.cg)
+        let points = stroke.points.map { DrawingUtilities.mapped($0.cg, in: size) }
         let copies = SymmetryEngine.copies(of: points, mode: stroke.symmetry, center: center)
+        let width = scaledWidth(stroke.width, in: size)
         for copy in copies {
             let path = DrawingUtilities.smoothPath(points: copy)
             if stroke.tool == .eraser {
                 context.blendMode = .destinationOut
-                context.stroke(path, with: .color(.white), style: StrokeStyle(lineWidth: stroke.width, lineCap: .round, lineJoin: .round))
+                context.stroke(path, with: .color(.white), style: StrokeStyle(lineWidth: width, lineCap: .round, lineJoin: .round))
                 context.blendMode = .normal
             } else {
                 context.stroke(
                     path,
                     with: .color(Color(hex: stroke.colorHex)),
-                    style: StrokeStyle(lineWidth: stroke.width, lineCap: .round, lineJoin: .round)
+                    style: StrokeStyle(lineWidth: width, lineCap: .round, lineJoin: .round)
                 )
             }
         }
+    }
+
+    private func scaledWidth(_ width: CGFloat, in size: CGSize) -> CGFloat {
+        width * min(size.width, size.height) / 320
     }
 
     private func drawFill(_ fill: FillBlob, context: inout GraphicsContext, size: CGSize) {

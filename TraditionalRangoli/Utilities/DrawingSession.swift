@@ -18,6 +18,7 @@ final class DrawingSession: ObservableObject {
     @Published var studio: StudioKind
     @Published var pattern: RangoliPattern?
     @Published var showGuides: Bool
+    @Published var canvasSize: CGSize = CGSize(width: 320, height: 320)
 
     init(
         studio: StudioKind,
@@ -37,7 +38,7 @@ final class DrawingSession: ObservableObject {
         self.tool = .brush
         self.showGuides = showGuides
         if let artwork {
-            strokes = artwork.strokes
+            strokes = DrawingUtilities.normalizedStrokes(artwork.strokes)
             fills = artwork.fills
         }
     }
@@ -47,26 +48,30 @@ final class DrawingSession: ObservableObject {
     var title: String { pattern?.title ?? (studio == .freehand ? "Freehand Rangoli" : "Dot Rangoli") }
 
     func begin(at point: CGPoint, in size: CGSize) {
+        canvasSize = size
         if tool == .fill || tool == .rice || tool == .flower || tool == .diya || tool == .dots {
             addFill(at: point, in: size)
             return
         }
         let snapped = prepared(point, in: size)
-        livePoints = [snapped]
+        livePoints = [DrawingUtilities.normalized(snapped, in: size)]
     }
 
     func move(to point: CGPoint, in size: CGSize) {
         guard tool == .brush || tool == .eraser else { return }
+        canvasSize = size
         let snapped = prepared(point, in: size)
-        guard let last = livePoints.last else {
-            livePoints = [snapped]
+        guard let lastNorm = livePoints.last else {
+            livePoints = [DrawingUtilities.normalized(snapped, in: size)]
             return
         }
+        let last = DrawingUtilities.mapped(lastNorm, in: size)
         let cell = min(size.width, size.height) * 0.8 / CGFloat(max(gridSize - 1, 1))
         if hypot(snapped.x - last.x, snapped.y - last.y) > cell * 2.6 {
             return
         }
-        livePoints.append(contentsOf: DrawingUtilities.interpolate(from: last, to: snapped, spacing: 2.2))
+        let extras = DrawingUtilities.interpolate(from: last, to: snapped, spacing: 2.2)
+        livePoints.append(contentsOf: extras.map { DrawingUtilities.normalized($0, in: size) })
     }
 
     func end() {
@@ -132,7 +137,7 @@ final class DrawingSession: ObservableObject {
     }
 
     func load(_ artwork: UserArtwork) {
-        strokes = artwork.strokes
+        strokes = DrawingUtilities.normalizedStrokes(artwork.strokes)
         fills = artwork.fills
         gridSize = artwork.gridSize
         studio = artwork.studio

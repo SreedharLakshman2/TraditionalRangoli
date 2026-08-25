@@ -3,6 +3,7 @@ import SwiftUI
 struct HomeView: View {
     @EnvironmentObject private var router: AppRouter
     @EnvironmentObject private var settings: SettingsStore
+    @Environment(\.horizontalSizeClass) private var sizeClass
     private let daily = PatternCatalog.daily
 
     var body: some View {
@@ -17,6 +18,7 @@ struct HomeView: View {
             .padding(.horizontal, 20)
             .padding(.top, 8)
             .padding(.bottom, 24)
+            .courtyardColumn()
         }
         .background(Color.clear)
         .navigationBarTitleDisplayMode(.inline)
@@ -61,7 +63,7 @@ struct HomeView: View {
                     MetaChip(text: daily.difficulty.title)
                 }
                 RangoliPreview(motif: daily.motif, animate: true)
-                    .frame(height: 210)
+                    .frame(height: sizeClass == .regular ? 280 : 210)
                     .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
                     .overlay(GoldCornerFrame().padding(10))
                 Text(daily.title)
@@ -97,36 +99,50 @@ struct HomeView: View {
     private var collections: some View {
         VStack(alignment: .leading, spacing: 14) {
             SectionHeader(title: "Explore Collections")
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 12) {
-                    ForEach(BrowseCollection.allCases) { collection in
-                        NavigationLink {
-                            CollectionListView(collection: collection)
-                        } label: {
-                            CategoryCard(
-                                title: collection.title,
-                                symbol: collection.symbol,
-                                motif: PatternCatalog.matching(collection).first?.motif ?? .lotusDot
-                            )
-                        }
-                        .buttonStyle(PressScaleStyle())
-                    }
+            if sizeClass == .regular {
+                LazyVGrid(columns: CourtyardLayout.categoryColumns(regular: true), spacing: 12) {
+                    collectionLinks
                 }
-                .padding(.vertical, 4)
+                .environment(\.courtyardExpandedCards, true)
+            } else {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 12) {
+                        collectionLinks
+                    }
+                    .padding(.vertical, 4)
+                }
             }
+        }
+    }
+
+    @ViewBuilder
+    private var collectionLinks: some View {
+        ForEach(BrowseCollection.allCases) { collection in
+            NavigationLink {
+                CollectionListView(collection: collection)
+            } label: {
+                CategoryCard(
+                    title: collection.title,
+                    symbol: collection.symbol,
+                    motif: PatternCatalog.matching(collection).first?.motif ?? .lotusDot
+                )
+            }
+            .buttonStyle(PressScaleStyle())
         }
     }
 
     private var popular: some View {
         VStack(alignment: .leading, spacing: 14) {
             SectionHeader(title: "Popular Patterns", subtitle: "Large, slow-drawn courtyard pieces")
-            ForEach(PatternCatalog.popular) { pattern in
-                NavigationLink {
-                    PatternDetailView(pattern: pattern)
-                } label: {
-                    RangoliCard(pattern: pattern, large: true)
+            LazyVGrid(columns: CourtyardLayout.patternColumns(regular: sizeClass == .regular), spacing: 14) {
+                ForEach(PatternCatalog.popular) { pattern in
+                    NavigationLink {
+                        PatternDetailView(pattern: pattern)
+                    } label: {
+                        RangoliCard(pattern: pattern, large: true)
+                    }
+                    .buttonStyle(PressScaleStyle(amount: 0.985))
                 }
-                .buttonStyle(PressScaleStyle(amount: 0.985))
             }
         }
     }
@@ -143,10 +159,11 @@ struct HomeView: View {
 
 struct CollectionListView: View {
     let collection: BrowseCollection
+    @Environment(\.horizontalSizeClass) private var sizeClass
 
     var body: some View {
         ScrollView {
-            LazyVStack(spacing: 14) {
+            LazyVGrid(columns: CourtyardLayout.patternColumns(regular: sizeClass == .regular), spacing: 14) {
                 ForEach(PatternCatalog.matching(collection)) { pattern in
                     NavigationLink {
                         PatternDetailView(pattern: pattern)
@@ -157,6 +174,7 @@ struct CollectionListView: View {
                 }
             }
             .padding(20)
+            .courtyardColumn(1100)
         }
         .background(PaperBackground(showWatermark: false).ignoresSafeArea())
         .navigationTitle(collection.title)

@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct ExploreView: View {
+    @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var query = ""
 
     var body: some View {
@@ -18,6 +19,7 @@ struct ExploreView: View {
             }
             .padding(20)
             .padding(.bottom, 12)
+            .courtyardColumn()
         }
         .toolbar(.hidden, for: .navigationBar)
     }
@@ -85,12 +87,12 @@ struct ExploreView: View {
     }
 
     private var results: some View {
-        LazyVStack(spacing: 12) {
+        LazyVGrid(columns: CourtyardLayout.patternColumns(regular: sizeClass == .regular), spacing: 12) {
             ForEach(PatternCatalog.search(query)) { pattern in
                 NavigationLink {
                     PatternDetailView(pattern: pattern)
                 } label: {
-                    RangoliCard(pattern: pattern)
+                    RangoliCard(pattern: pattern, large: sizeClass == .regular)
                 }
                 .buttonStyle(PressScaleStyle(amount: 0.985))
             }
@@ -103,11 +105,18 @@ struct ExploreView: View {
                 .font(RangoliFont.label(12))
                 .tracking(1.6)
                 .foregroundStyle(RangoliColor.gold)
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 12) {
+            if sizeClass == .regular {
+                LazyVGrid(columns: CourtyardLayout.categoryColumns(regular: true), spacing: 12) {
                     content()
                 }
-                .padding(.vertical, 4)
+                .environment(\.courtyardExpandedCards, true)
+            } else {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 12) {
+                        content()
+                    }
+                    .padding(.vertical, 4)
+                }
             }
         }
     }
@@ -116,10 +125,11 @@ struct ExploreView: View {
 struct PatternGridView: View {
     let title: String
     let patterns: [RangoliPattern]
+    @Environment(\.horizontalSizeClass) private var sizeClass
 
     var body: some View {
         ScrollView {
-            LazyVStack(spacing: 14) {
+            LazyVGrid(columns: CourtyardLayout.patternColumns(regular: sizeClass == .regular), spacing: 14) {
                 ForEach(patterns) { pattern in
                     NavigationLink {
                         PatternDetailView(pattern: pattern)
@@ -130,6 +140,7 @@ struct PatternGridView: View {
                 }
             }
             .padding(20)
+            .courtyardColumn(1100)
         }
         .background(PaperBackground(showWatermark: false).ignoresSafeArea())
         .navigationTitle(title)

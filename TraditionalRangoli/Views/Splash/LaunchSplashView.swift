@@ -3,6 +3,7 @@ import SwiftUI
 struct LaunchSplashView: View {
     var onFinished: () -> Void
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var drawn: CGFloat = 0
     @State private var glow = false
 
@@ -14,9 +15,9 @@ struct LaunchSplashView: View {
                 ZStack {
                     Circle()
                         .stroke(RangoliColor.gold.opacity(glow ? 0.55 : 0.18), lineWidth: 1.5)
-                        .frame(width: 168, height: 168)
+                        .frame(width: sizeClass == .regular ? 220 : 168, height: sizeClass == .regular ? 220 : 168)
                     RangoliPreview(motif: .lotusDot, progress: drawn, floor: true)
-                        .frame(width: 148, height: 148)
+                        .frame(width: sizeClass == .regular ? 196 : 148, height: sizeClass == .regular ? 196 : 148)
                         .clipShape(Circle())
                         .shadow(color: RangoliColor.gold.opacity(0.3), radius: 18)
                 }

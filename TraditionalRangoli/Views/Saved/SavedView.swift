@@ -4,6 +4,7 @@ import UIKit
 struct SavedView: View {
     @EnvironmentObject private var artworks: ArtworkStore
     @EnvironmentObject private var router: AppRouter
+    @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var segment = 0
 
     var body: some View {
@@ -41,7 +42,7 @@ struct SavedView: View {
                 Spacer()
             } else {
                 ScrollView {
-                    LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)], spacing: 12) {
+                    LazyVGrid(columns: CourtyardLayout.galleryColumns(regular: sizeClass == .regular), spacing: 12) {
                         ForEach(items) { art in
                             NavigationLink {
                                 ArtworkDetailView(artwork: art)
@@ -53,9 +54,11 @@ struct SavedView: View {
                     }
                     .padding(20)
                     .padding(.bottom, 12)
+                    .courtyardColumn(1100)
                 }
             }
         }
+        .courtyardColumn(1100)
         .toolbar(.hidden, for: .navigationBar)
     }
 }
@@ -109,13 +112,14 @@ struct ArtworkDetailView: View {
     @EnvironmentObject private var artworks: ArtworkStore
     @EnvironmentObject private var router: AppRouter
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var shareURL: URL?
 
     var body: some View {
         ScrollView {
             VStack(spacing: 16) {
                 preview
-                    .frame(height: 320)
+                    .frame(height: sizeClass == .regular ? 420 : 320)
                     .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
                     .goldFrame(cornerRadius: 28)
                 Text(artwork.title)
@@ -127,21 +131,26 @@ struct ArtworkDetailView: View {
                     ShareLink(item: url) {
                         label("Share", "square.and.arrow.up")
                     }
+                    .courtyardControls()
                 }
                 RangoliSecondaryButton(title: "Continue Editing", icon: "pencil.tip") {
                     router.studio = StudioRoute(kind: .continueArtwork(artwork))
                 }
+                .courtyardControls()
                 RangoliSecondaryButton(title: "Duplicate", icon: "plus.square.on.square") {
                     artworks.duplicate(artwork)
                 }
+                .courtyardControls()
                 Button(role: .destructive) {
                     artworks.delete(artwork)
                     dismiss()
                 } label: {
                     label("Delete", "trash")
                 }
+                .courtyardControls()
             }
             .padding(20)
+            .courtyardColumn()
         }
         .background(PaperBackground(showWatermark: false).ignoresSafeArea())
         .navigationBarTitleDisplayMode(.inline)

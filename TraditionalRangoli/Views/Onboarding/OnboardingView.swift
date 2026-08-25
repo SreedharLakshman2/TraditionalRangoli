@@ -3,6 +3,7 @@ import SwiftUI
 struct OnboardingView: View {
     @EnvironmentObject private var settings: SettingsStore
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var page = 0
 
     private let pages: [(title: String, body: String, motif: MotifKind)] = [
@@ -17,7 +18,7 @@ struct OnboardingView: View {
             VStack(spacing: 24) {
                 Spacer()
                 RangoliPreview(motif: pages[page].motif, animate: true)
-                    .frame(width: 220, height: 220)
+                    .frame(width: sizeClass == .regular ? 300 : 220, height: sizeClass == .regular ? 300 : 220)
                     .clipShape(RoundedRectangle(cornerRadius: 36, style: .continuous))
                     .goldFrame(cornerRadius: 36)
                     .shadow(color: Color.black.opacity(0.12), radius: 18, y: 8)
@@ -50,6 +51,7 @@ struct OnboardingView: View {
                 }
             }
             .padding(24)
+            .courtyardColumn()
         }
         .preferredColorScheme(.light)
     }

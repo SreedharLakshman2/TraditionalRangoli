@@ -7,7 +7,6 @@ struct BannerAdView: UIViewRepresentable {
         let host = BannerHostView()
         host.banner.adUnitID = AdConfig.bannerAdUnitId
         host.banner.rootViewController = AdsManager.keyWindowRoot()
-        host.banner.load(GADRequest())
         return host
     }
 
@@ -20,6 +19,7 @@ struct BannerAdView: UIViewRepresentable {
 
 final class BannerHostView: UIView {
     let banner = GADBannerView(adSize: GADAdSizeBanner)
+    private var lastWidth: CGFloat = 0
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -31,17 +31,31 @@ final class BannerHostView: UIView {
         NSLayoutConstraint.activate([
             banner.topAnchor.constraint(equalTo: topAnchor),
             banner.centerXAnchor.constraint(equalTo: centerXAnchor),
-            banner.heightAnchor.constraint(equalToConstant: AdBannerSlot.height)
+            banner.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor),
+            banner.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor)
         ])
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let width = bounds.width
+        guard width > 1, abs(width - lastWidth) > 1 else { return }
+        lastWidth = width
+        let adSize = GADCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(width)
+        banner.adSize = adSize
+        banner.rootViewController = AdsManager.keyWindowRoot()
+        banner.load(GADRequest())
+    }
 }
 
 struct AdBannerSlot: View {
-    static let height: CGFloat = 50
+    static var height: CGFloat {
+        UIDevice.current.userInterfaceIdiom == .pad ? 90 : 50
+    }
 
     @EnvironmentObject private var ads: AdsManager
 

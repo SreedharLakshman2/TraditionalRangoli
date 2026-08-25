@@ -6,6 +6,8 @@ struct DrawingCanvas: View {
 
     var body: some View {
         GeometryReader { geo in
+            let side = min(geo.size.width, geo.size.height)
+            let canvas = CGSize(width: side, height: side)
             ZStack {
                 ClayFloor()
                 ArtworkRenderer(
@@ -25,19 +27,26 @@ struct DrawingCanvas: View {
             .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
             .goldFrame(cornerRadius: 28)
             .contentShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
+            .frame(width: side, height: side)
             .gesture(
                 DragGesture(minimumDistance: 0)
                     .onChanged { value in
+                        session.canvasSize = canvas
                         if session.livePoints.isEmpty {
-                            session.begin(at: value.location, in: geo.size)
+                            session.begin(at: value.location, in: canvas)
                         } else {
-                            session.move(to: value.location, in: geo.size)
+                            session.move(to: value.location, in: canvas)
                         }
                     }
                     .onEnded { _ in
                         session.end()
                     }
             )
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            .onAppear { session.canvasSize = canvas }
+            .onChange(of: side) { _, newValue in
+                session.canvasSize = CGSize(width: newValue, height: newValue)
+            }
             .accessibilityLabel("Rangoli drawing canvas")
             .accessibilityHint("Draw with one finger. Strokes snap to nearby dots when the grid is on.")
         }

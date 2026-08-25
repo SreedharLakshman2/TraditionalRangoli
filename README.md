@@ -1,6 +1,6 @@
 # Traditional Rangoli
 
-A premium iPhone app for learning, tracing, and creating traditional Indian rangoli and Tamil kolam. Built with SwiftUI.
+A premium iPhone and iPad app for learning, tracing, and creating traditional Indian rangoli and Tamil kolam. Built with SwiftUI.
 
 Open **`TraditionalRangoli.xcodeproj`** and run the **TraditionalRangoli** scheme.
 
@@ -8,7 +8,7 @@ Open **`TraditionalRangoli.xcodeproj`** and run the **TraditionalRangoli** schem
 
 - Xcode 16 or later
 - iOS 17+
-- iPhone, portrait
+- iPhone (portrait) and iPad (portrait and landscape)
 
 ## Experience
 
@@ -41,6 +41,8 @@ Listing copy: `AppStore/LISTING.md`
 Support email: sreedharlakshmanan4@gmail.com
 
 Bundle ID: `com.sreedhar.TraditionalRangoli`
+
+Upload iPad screenshots (12.9" or 13") in App Store Connect in addition to iPhone.
 
 ## Support
 
