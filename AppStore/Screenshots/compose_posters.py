@@ -202,8 +202,7 @@ def iphone_pro(screen: Image.Image) -> Image.Image:
     lip = max(4, sw // 80)
     rim = metal + lip
     fw, fh = sw + 2 * rim, sh + 2 * rim
-    btn = max(7, rim + 2)
-    pad_x, pad_t, pad_b = btn + 10, 8, 40
+    pad_x, pad_t, pad_b = 16, 8, 40
     canvas = Image.new("RGBA", (fw + pad_x * 2, fh + pad_t + pad_b), (0, 0, 0, 0))
     ox, oy = pad_x, pad_t
     outer_r = int(sw * 0.145)
@@ -213,13 +212,6 @@ def iphone_pro(screen: Image.Image) -> Image.Image:
     inner = rounded(Image.new("RGBA", (fw - metal * 2, fh - metal * 2), (8, 8, 10, 255)), max(12, outer_r - metal))
     canvas.alpha_composite(inner, (ox + metal, oy + metal))
     canvas.alpha_composite(rounded(screen.convert("RGB"), screen_r), (ox + rim, oy + rim))
-
-    d = ImageDraw.Draw(canvas)
-    metal_fill = (198, 193, 186)
-    d.rounded_rectangle((ox - btn + 3, oy + int(fh * 0.155), ox + 3, oy + int(fh * 0.20)), 3, fill=metal_fill)
-    d.rounded_rectangle((ox - btn + 3, oy + int(fh * 0.235), ox + 3, oy + int(fh * 0.325)), 3, fill=metal_fill)
-    d.rounded_rectangle((ox - btn + 3, oy + int(fh * 0.345), ox + 3, oy + int(fh * 0.435)), 3, fill=metal_fill)
-    d.rounded_rectangle((ox + fw - 3, oy + int(fh * 0.27), ox + fw + btn - 3, oy + int(fh * 0.40)), 3, fill=metal_fill)
     return canvas
 
 
