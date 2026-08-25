@@ -31,12 +31,15 @@ enum GeometryFactory {
     }
 
     static func steps(for pattern: RangoliPattern) -> [RangoliStep] {
-        let total = strokes(for: pattern.motif).count
-        return (0..<total).map { index in
-            RangoliStep(
+        let all = strokes(for: pattern.motif)
+        let n = max(all.count, 1)
+        let groups = min(8, n)
+        return (0..<groups).map { index in
+            let strokeIndex = min(n - 1, Int((Double(index) + 0.5) / Double(groups) * Double(n)))
+            return RangoliStep(
                 id: "\(pattern.id)-step-\(index)",
-                instruction: instruction(for: pattern.motif, index: index, total: total),
-                strokeIndex: index
+                instruction: instruction(for: pattern.motif, index: index, total: groups),
+                strokeIndex: strokeIndex
             )
         }
     }

@@ -158,7 +158,7 @@ struct RangoliPattern: Identifiable, Hashable {
     var motif: MotifKind
     var xpReward: Int
 
-    var stepCount: Int { GeometryFactory.strokes(for: motif).count }
+    var stepCount: Int { steps.count }
     var steps: [RangoliStep] { GeometryFactory.steps(for: self) }
 }
 

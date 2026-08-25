@@ -50,8 +50,11 @@ struct RangoliPreview: View {
     }
 
     private func loopProgress(_ date: Date) -> CGFloat {
-        let cycle = date.timeIntervalSinceReferenceDate.truncatingRemainder(dividingBy: 5.2) / 5.2
-        return CGFloat(cycle)
+        let cycle = date.timeIntervalSinceReferenceDate.truncatingRemainder(dividingBy: 6.5) / 6.5
+        if cycle < 0.7 {
+            return CGFloat(cycle / 0.7)
+        }
+        return 1
     }
 }
 
