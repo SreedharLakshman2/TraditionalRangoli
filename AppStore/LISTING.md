@@ -24,7 +24,7 @@ Discover lotus, peacock, diya, mandala, Pongal and Onam patterns. Learn each one
 • Save, favorite, duplicate, and share from your gallery  
 • XP journey, streaks, and courtyard achievements  
 
-Artwork stays on your device. No account. No ads.
+Artwork stays on your device. No account. A banner sits on the main tabs, and a full-screen ad may appear after you finish a rangoli.
 
 Sai Laksha Technologies  
 sreedharlakshmanan4@gmail.com
@@ -49,4 +49,4 @@ Demo: open the app, skip or complete onboarding, tap Daily Rangoli → Start Dra
 
 ## Privacy nutrition label
 
-Data not collected.
+Device ID may be used by Google AdMob for third-party advertising. None of this is linked to an identity we hold.

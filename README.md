@@ -18,7 +18,15 @@ Discover → Learn → Trace → Create → Decorate → Save → Share
 - Real drawing canvas with smooth strokes, dot snapping, undo/redo, and 2/4/8-way symmetry
 - Guided step-by-step tracing with gentle path checks
 - Coloring and courtyard decorations (rice powder, flowers, diyas)
-- On-device gallery — no account, no ads, no backend
+- On-device gallery — no account, no backend
+
+## Ads
+
+Debug builds use Google sample banner and interstitial units so ads always fill.
+
+Release builds use the Traditional Rangoli AdMob app ID in `Info.plist` (`GADApplicationIdentifier`). Banner and interstitial units for bundle `com.sreedhar.TraditionalRangoli` are in `TraditionalRangoli/Services/AdConfig.swift`.
+
+A banner sits under the tab bar on Home, Explore, Create, Saved, and Profile. An interstitial can appear after you complete a rangoli, with a short cooldown.
 
 ## App Store
 

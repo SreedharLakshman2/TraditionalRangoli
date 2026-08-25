@@ -30,6 +30,8 @@ struct StudioRoute: Identifiable, Equatable {
 
 struct TraditionalRangoliAppRoot: View {
     @EnvironmentObject private var settings: SettingsStore
+    @EnvironmentObject private var ads: AdsManager
+    @Environment(\.scenePhase) private var scenePhase
     @State private var showSplash = true
 
     var body: some View {
@@ -40,6 +42,7 @@ struct TraditionalRangoliAppRoot: View {
                     withAnimation(.easeInOut(duration: 0.55)) {
                         showSplash = false
                     }
+                    ads.bootstrap()
                 }
                 .transition(.opacity)
                 .zIndex(1)
@@ -49,6 +52,11 @@ struct TraditionalRangoliAppRoot: View {
         .sheet(isPresented: onboardingBinding) {
             OnboardingView()
                 .interactiveDismissDisabled()
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active {
+                ads.onAppBecameActive()
+            }
         }
     }
 
@@ -81,9 +89,12 @@ struct RootView: View {
                     NavigationStack { ProfileView() }
                 }
             }
-            .padding(.bottom, 72)
+            .padding(.bottom, 72 + AdBannerSlot.height)
 
-            CustomTabBar(selection: $router.tab)
+            VStack(spacing: 4) {
+                CustomTabBar(selection: $router.tab)
+                AdBannerSlot()
+            }
         }
         .fullScreenCover(item: $router.studio) { route in
             studio(for: route)
