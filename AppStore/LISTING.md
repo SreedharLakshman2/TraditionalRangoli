@@ -24,7 +24,7 @@ Discover lotus, peacock, diya, mandala, Pongal and Onam patterns. Learn each one
 • Save, favorite, duplicate, and share from your gallery  
 • XP journey, streaks, and courtyard achievements  
 
-Artwork stays on your device. No account. A banner sits on the main tabs, and a full-screen ad may appear after you finish a rangoli.
+Artwork stays on your device. No account. A banner sits on the main tabs, and a full-screen ad may appear after you finish a rangoli. After a few completed designs, Apple’s in-app rating card may appear; you can also rate from Profile.
 
 Works on iPhone (portrait) and iPad (portrait and landscape).
 

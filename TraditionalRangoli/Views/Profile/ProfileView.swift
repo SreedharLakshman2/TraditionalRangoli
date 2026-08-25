@@ -148,6 +148,27 @@ struct ProfileView: View {
                 .padding(.top, 14)
             Divider()
             aboutLink("Privacy Policy", RangoliColor.privacyURL)
+            Divider()
+            Button {
+                Haptics.tap(settings)
+                ReviewPrompt.requestReview()
+            } label: {
+                HStack {
+                    Text("Rate Traditional Rangoli")
+                        .font(RangoliFont.headline(16))
+                        .foregroundStyle(RangoliColor.primary)
+                    Spacer()
+                    Image(systemName: "star.fill")
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundStyle(RangoliColor.gold)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.vertical, 12)
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Rate Traditional Rangoli")
+            .accessibilityHint("Opens Apple's rating card")
             Text(RangoliColor.copyright)
                 .font(RangoliFont.caption(12))
                 .foregroundStyle(RangoliColor.muted)

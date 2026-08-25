@@ -13,6 +13,7 @@ final class AdsManager: NSObject, ObservableObject, GADFullScreenContentDelegate
     private var didBootstrap = false
     private var isLoadingInterstitial = false
     private var lastInterstitialAt: Date?
+    private var pendingAfterInterstitial: (() -> Void)?
     private let interstitialCooldown: TimeInterval = 45
 
     func bootstrap() {
@@ -60,38 +61,48 @@ final class AdsManager: NSObject, ObservableObject, GADFullScreenContentDelegate
     }
 
     /// Full-screen ad after a rangoli is finished. Celebration stays on screen first.
-    func showInterstitialAfterRangoli(delay: TimeInterval = 1.15) {
+    /// `then` runs after the ad is dismissed, or immediately if no ad is shown.
+    func showInterstitialAfterRangoli(delay: TimeInterval = 1.15, then done: (() -> Void)? = nil) {
         Task { @MainActor in
             try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
-            self.showInterstitialIfAvailable()
+            self.showInterstitialIfAvailable(then: done)
         }
     }
 
-    func showInterstitialIfAvailable() {
+    func showInterstitialIfAvailable(then done: (() -> Void)? = nil) {
         if let last = lastInterstitialAt, Date().timeIntervalSince(last) < interstitialCooldown {
             preloadInterstitial()
+            done?()
             return
         }
         guard let interstitial, let root = Self.keyWindowRoot() else {
             preloadInterstitial()
+            done?()
             return
         }
         lastInterstitialAt = Date()
+        pendingAfterInterstitial = done
         interstitial.present(fromRootViewController: root)
         self.interstitial = nil
     }
 
+    private func finishInterstitial() {
+        interstitial = nil
+        preloadInterstitial()
+        let done = pendingAfterInterstitial
+        pendingAfterInterstitial = nil
+        done?()
+    }
+
     nonisolated func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
         Task { @MainActor in
-            self.interstitial = nil
-            self.preloadInterstitial()
+            self.finishInterstitial()
         }
     }
 
     nonisolated func ad(_ ad: GADFullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
         Task { @MainActor in
-            self.interstitial = nil
-            self.preloadInterstitial()
+            self.finishInterstitial()
         }
     }
 

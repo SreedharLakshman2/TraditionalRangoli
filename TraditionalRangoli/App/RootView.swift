@@ -43,6 +43,7 @@ struct TraditionalRangoliAppRoot: View {
                         showSplash = false
                     }
                     ads.bootstrap()
+                    ReviewPrompt.askIfAppropriate(delay: 8)
                 }
                 .transition(.opacity)
                 .zIndex(1)
@@ -53,9 +54,13 @@ struct TraditionalRangoliAppRoot: View {
             OnboardingView()
                 .interactiveDismissDisabled()
         }
+        .onAppear {
+            ReviewPrompt.recordFirstUseIfNeeded()
+        }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {
                 ads.onAppBecameActive()
+                ReviewPrompt.recordFirstUseIfNeeded()
             }
         }
     }

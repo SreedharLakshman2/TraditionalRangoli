@@ -14,9 +14,13 @@ Traditional Rangoli is a rangoli and kolam learning app. Your drawings, favorite
 The app stores locally:
 
 - Rangoli drawings, thumbnails, and favorites (files in the app’s Documents folder)
-- XP, streak, completed patterns, sound, haptics, grid, and onboarding preferences (UserDefaults)
+- XP, streak, completed patterns, sound, haptics, grid, onboarding, and local timestamps used to time Apple’s in-app rating prompt (UserDefaults)
 
 This is **not** sent to Sai Laksha Technologies.
+
+## App ratings
+
+After you complete a few rangoli, or if you tap **Rate Traditional Rangoli** in Profile, the app may show Apple’s in-app rating card (StoreKit). We do not receive your rating. Apple limits how often that card can appear.
 
 ## Advertising
 
