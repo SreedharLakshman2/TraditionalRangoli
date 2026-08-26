@@ -19,23 +19,19 @@ final class AdsManager: NSObject, ObservableObject, GADFullScreenContentDelegate
     func bootstrap() {
         guard !didBootstrap else { return }
         didBootstrap = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-            self.requestTrackingThenStart()
-        }
+        startAds()
     }
 
     func onAppBecameActive() {
         guard didBootstrap else { return }
-        if ATTrackingManager.trackingAuthorizationStatus == .notDetermined {
-            requestTrackingThenStart()
-        }
+        requestTrackingIfNeeded()
     }
 
-    private func requestTrackingThenStart() {
-        ATTrackingManager.requestTrackingAuthorization { _ in
-            Task { @MainActor in
-                self.startAds()
-            }
+    /// Ask after Home is on screen so ATT does not hold the first launch.
+    func requestTrackingIfNeeded() {
+        guard ATTrackingManager.trackingAuthorizationStatus == .notDetermined else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+            ATTrackingManager.requestTrackingAuthorization { _ in }
         }
     }
 

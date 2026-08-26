@@ -39,11 +39,14 @@ struct TraditionalRangoliAppRoot: View {
             RootView()
             if showSplash {
                 LaunchSplashView {
-                    withAnimation(.easeInOut(duration: 0.55)) {
+                    withAnimation(.easeOut(duration: 0.28)) {
                         showSplash = false
                     }
-                    ads.bootstrap()
+                    ads.requestTrackingIfNeeded()
                     ReviewPrompt.askIfAppropriate(delay: 8)
+                }
+                .onAppear {
+                    ads.bootstrap()
                 }
                 .transition(.opacity)
                 .zIndex(1)

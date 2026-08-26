@@ -43,18 +43,18 @@ struct LaunchSplashView: View {
             appear = true
             if reduceMotion {
                 drawn = 1
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.55) {
                     onFinished()
                 }
                 return
             }
-            withAnimation(.easeInOut(duration: 1.35)) {
+            withAnimation(.easeInOut(duration: 0.7)) {
                 drawn = 1
             }
-            withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
+            withAnimation(.easeInOut(duration: 1.0).repeatForever(autoreverses: true)) {
                 glow = true
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.1) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.95) {
                 onFinished()
             }
         }
