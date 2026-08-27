@@ -244,20 +244,25 @@ enum PatternCatalog {
         all.filter(collection.matches)
     }
 
-    static func search(_ query: String) -> [RangoliPattern] {
+    static func search(_ query: String, language: AppLanguage = LanguageStore.shared.language) -> [RangoliPattern] {
         let raw = query.trimmingCharacters(in: .whitespacesAndNewlines)
         let trimmed = raw.lowercased()
         guard !trimmed.isEmpty else { return all }
         return all.filter {
             $0.title.lowercased().contains(trimmed)
+                || $0.localizedTitle(language).localizedCaseInsensitiveContains(raw)
                 || $0.tamilTitle.contains(raw)
+                || $0.localizedNote(language).localizedCaseInsensitiveContains(raw)
                 || $0.culturalNote.lowercased().contains(trimmed)
                 || $0.tags.contains(where: { $0.contains(trimmed) })
                 || $0.family.title.lowercased().contains(trimmed)
+                || $0.family.localizedTitle(language).localizedCaseInsensitiveContains(raw)
                 || $0.family.tamilTitle.contains(raw)
                 || $0.theme.title.lowercased().contains(trimmed)
+                || $0.theme.localizedTitle(language).localizedCaseInsensitiveContains(raw)
                 || $0.festivals.contains(where: {
                     $0.title.lowercased().contains(trimmed)
+                        || $0.localizedTitle(language).localizedCaseInsensitiveContains(raw)
                         || $0.rawValue.contains(trimmed)
                         || $0.tamilTitle.contains(raw)
                 })

@@ -43,6 +43,8 @@ struct TraditionalRangoliApp: App {
             .environmentObject(router)
             .environmentObject(ads)
             .environmentObject(language)
+            .id(settings.colorTheme)
+            .preferredColorScheme(settings.colorTheme.colorScheme)
         }
     }
 }

@@ -67,6 +67,7 @@ struct SavedView: View {
 struct SavedCard: View {
     let artwork: UserArtwork
     @EnvironmentObject private var artworks: ArtworkStore
+    @EnvironmentObject private var language: LanguageStore
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -93,7 +94,7 @@ struct SavedCard: View {
                         .foregroundStyle(RangoliColor.primary)
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel(artwork.isFavorite ? "Remove favorite" : "Favorite")
+                .accessibilityLabel(artwork.isFavorite ? language.t("favorited") : language.t("favorite"))
             }
         }
         .padding(10)

@@ -52,7 +52,7 @@ struct ColoringView: View {
                 }
             }
         }
-        .preferredColorScheme(.light)
+        .preferredColorScheme(CourtyardColorTheme.current.colorScheme)
         .onAppear {
             session.tool = .fill
             session.snapToDots = false

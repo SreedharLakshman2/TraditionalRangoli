@@ -18,12 +18,14 @@ struct PatternDetailView: View {
                     .goldFrame(cornerRadius: 28)
                     .shadow(color: Color.black.opacity(0.1), radius: 16, y: 8)
 
-                Text(pattern.tamilTitle)
-                    .font(RangoliFont.tamil(28))
-                    .foregroundStyle(RangoliColor.ink)
                 Text(pattern.localizedTitle(language.language))
-                    .font(.rangoliScript(22, language: language.language))
-                    .foregroundStyle(RangoliColor.muted)
+                    .font(.rangoliScript(28, language: language.language))
+                    .foregroundStyle(RangoliColor.ink)
+                if language.language == .tamil {
+                    Text(pattern.title)
+                        .font(RangoliFont.title(22))
+                        .foregroundStyle(RangoliColor.muted)
+                }
 
                 HStack(spacing: 8) {
                     MetaChip(text: pattern.family.localizedTitle(language.language))
@@ -37,11 +39,6 @@ struct PatternDetailView: View {
                 }
 
                 culturalNote
-
-                Text(pattern.description)
-                    .font(RangoliFont.body(16))
-                    .foregroundStyle(RangoliColor.muted)
-                    .fixedSize(horizontal: false, vertical: true)
 
                 RangoliPrimaryButton(title: language.t("learnStepByStep"), icon: "hand.draw") {
                     router.studio = StudioRoute(kind: .guided(pattern))

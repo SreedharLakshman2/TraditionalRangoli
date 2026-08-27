@@ -100,6 +100,32 @@ extension BrushSize {
     }
 }
 
+extension CourtyardColorTheme {
+    func localizedTitle(_ language: AppLanguage) -> String {
+        L10n.string(l10nKey, language)
+    }
+}
+
+enum LocalizationChrome {
+    /// Copy that must not stay English on Home, Explore, and Saved.
+    static let visibleTabKeys: [String] = [
+        "exploreCollections", "kolamLessons", "kolamLessonsSub",
+        "familyPulli", "familySikku", "familyFreehand", "familyGeometric", "familyFloral",
+        "themeLotus", "themePeacock", "themeDiya",
+        "festivalPongal", "festivalDiwali", "festivalNavratri", "festivalOnam", "festivalUgadi", "festivalNewYear",
+        "exploreSubtitle", "searchHint", "sectionTraditional", "sectionThemes", "sectionFestivals",
+        "pulliNxN", "stepsCount",
+        "headlineOnam", "myCreations", "favorites",
+        "emptyGalleryTitle", "emptyGallerySub", "createRangoli",
+        "emptyFavTitle", "emptyFavSub", "explorePatterns",
+        "pattern.onam-pookalam.title", "pattern.onam-pookalam.note"
+    ]
+
+    static func differsFromEnglish(_ key: String, _ language: AppLanguage) -> Bool {
+        language == .english || L10n.string(key, language) != L10n.string(key, .english)
+    }
+}
+
 extension PowderSwatch {
     func localizedTitle(_ language: AppLanguage) -> String {
         switch self {

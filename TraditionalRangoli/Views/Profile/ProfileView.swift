@@ -15,6 +15,7 @@ struct ProfileView: View {
                 progressCard
                 achievements
                 languageCard
+                themeCard
                 settingsCard
                 about
             }
@@ -107,14 +108,10 @@ struct ProfileView: View {
     }
 
     private var languageCard: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(language.t("language"))
-                .font(.rangoliScript(20, language: language.language))
-                .foregroundStyle(RangoliColor.ink)
+        VStack(alignment: .leading, spacing: 14) {
+            SectionHeader(title: language.t("language"), subtitle: language.t("chooseLanguage"))
             LanguagePickerList(query: $languageQuery)
         }
-        .padding(16)
-        .paperCard()
     }
 
     private var settingsCard: some View {
@@ -135,22 +132,60 @@ struct ProfileView: View {
                 Text("15 × 15").tag(15)
             }
             .padding(.vertical, 8)
-            Divider()
-            HStack {
-                Text(language.t("theme"))
-                Spacer()
-                Text(language.t("ivoryCourtyard"))
-                    .foregroundStyle(RangoliColor.muted)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.8)
-            }
-            .padding(.vertical, 12)
         }
         .font(RangoliFont.body(16))
         .foregroundStyle(RangoliColor.ink)
         .padding(.horizontal, 16)
         .paperCard()
         .tint(RangoliColor.primary)
+    }
+
+    private var themeCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(language.t("chooseTheme"))
+                .font(.rangoliScript(20, language: language.language))
+                .foregroundStyle(RangoliColor.ink)
+            LazyVGrid(columns: [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)], spacing: 10) {
+                ForEach(CourtyardColorTheme.allCases) { theme in
+                    Button {
+                        Haptics.tap(settings)
+                        settings.colorTheme = theme
+                    } label: {
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack(spacing: 6) {
+                                Circle().fill(theme.palette.primary).frame(width: 16, height: 16)
+                                Circle().fill(theme.palette.gold).frame(width: 16, height: 16)
+                                Circle().fill(theme.palette.paper).frame(width: 16, height: 16)
+                                    .overlay(Circle().stroke(RangoliColor.ink.opacity(0.15), lineWidth: 1))
+                                Spacer()
+                                if settings.colorTheme == theme {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .foregroundStyle(theme.palette.primary)
+                                }
+                            }
+                            Text(theme.localizedTitle(language.language))
+                                .font(RangoliFont.caption(12))
+                                .foregroundStyle(RangoliColor.ink)
+                                .lineLimit(2)
+                                .minimumScaleFactor(0.8)
+                                .multilineTextAlignment(.leading)
+                        }
+                        .padding(12)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(theme.palette.ivory, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                .stroke(settings.colorTheme == theme ? theme.palette.primary : RangoliColor.stroke, lineWidth: settings.colorTheme == theme ? 2 : 1)
+                        )
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(theme.localizedTitle(language.language))
+                    .accessibilityAddTraits(settings.colorTheme == theme ? .isSelected : [])
+                }
+            }
+        }
+        .padding(16)
+        .paperCard()
     }
 
     private var about: some View {

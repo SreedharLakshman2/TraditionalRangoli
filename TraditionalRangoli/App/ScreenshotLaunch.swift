@@ -62,6 +62,6 @@ struct ScreenshotRoot: View {
                 RootView()
             }
         }
-        .preferredColorScheme(.light)
+        .preferredColorScheme(CourtyardColorTheme.current.colorScheme)
     }
 }

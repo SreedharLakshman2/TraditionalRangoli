@@ -70,14 +70,16 @@ struct HomeView: View {
                         .frame(maxWidth: .infinity)
                         .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
                         .overlay(GoldCornerFrame().padding(10))
-                    Text(pattern.tamilTitle)
-                        .font(RangoliFont.tamil(sizeClass == .regular ? 30 : 24))
+                    Text(pattern.localizedTitle(language.language))
+                        .font(.rangoliScript(sizeClass == .regular ? 30 : 24, language: language.language))
                         .foregroundStyle(RangoliColor.ink)
                         .lineLimit(2)
                         .minimumScaleFactor(0.8)
-                    Text(pattern.localizedTitle(language.language))
-                        .font(RangoliFont.headline(16))
-                        .foregroundStyle(RangoliColor.muted)
+                    if language.language == .tamil {
+                        Text(pattern.title)
+                            .font(RangoliFont.headline(16))
+                            .foregroundStyle(RangoliColor.muted)
+                    }
                     Text(lesson.headline(language.language))
                         .font(RangoliFont.body(15))
                         .foregroundStyle(RangoliColor.ink)
@@ -108,13 +110,13 @@ struct HomeView: View {
         }
         .padding(18)
         .background(
-            LinearGradient(colors: [RangoliColor.paper, Color(hex: 0xF3E6D0)], startPoint: .top, endPoint: .bottom),
+            LinearGradient(colors: [RangoliColor.paper, RangoliColor.cardWash], startPoint: .top, endPoint: .bottom),
             in: RoundedRectangle(cornerRadius: RangoliRadius.xl, style: .continuous)
         )
         .goldFrame(cornerRadius: RangoliRadius.xl)
         .shadow(color: RangoliColor.primary.opacity(0.12), radius: 18, y: 10)
         .accessibilityElement(children: .contain)
-        .accessibilityLabel("\(lesson.kicker(language.language)). \(pattern.tamilTitle). \(pattern.localizedTitle(language.language)). \(lesson.headline(language.language))")
+        .accessibilityLabel("\(lesson.kicker(language.language)). \(pattern.localizedTitle(language.language)). \(lesson.headline(language.language))")
     }
 
     private var collections: some View {

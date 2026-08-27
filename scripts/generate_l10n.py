@@ -138,6 +138,12 @@ EN = {
     "defaultGrid": "Default Grid",
     "theme": "Theme",
     "ivoryCourtyard": "Ivory courtyard",
+    "chooseTheme": "Colour theme",
+    "themeMidnight": "Midnight indigo",
+    "themeLotusBlush": "Lotus blush",
+    "themeKeralaGreen": "Kerala garden",
+    "themeDeepavaliGold": "Deepavali gold",
+    "themeTerracottaClay": "Terracotta clay",
     "about": "About",
     "aboutApp": "Traditional Rangoli is a courtyard teacher for Tamil kolam and Indian rangoli. Artwork stays on this device.",
     "adsNote": "Ads keep Traditional Rangoli free.",
@@ -365,6 +371,12 @@ T["hindi"] = {
     "defaultGrid": "डिफ़ॉल्ट जाल",
     "theme": "थीम",
     "ivoryCourtyard": "हाथीदाँत आंगन",
+    "chooseTheme": "रंग थीम",
+    "themeMidnight": "मध्यरात्रि नील",
+    "themeLotusBlush": "कमल गुलाबी",
+    "themeKeralaGreen": "केरल उद्यान",
+    "themeDeepavaliGold": "दीपावली स्वर्ण",
+    "themeTerracottaClay": "टेराकोटा आंगन",
     "about": "परिचय",
     "aboutApp": "ट्रडिशनल रंगोली तमिल कोलम और भारतीय रंगोली का आंगन शिक्षक है। कला इसी उपकरण पर रहती है।",
     "adsNote": "विज्ञापन इस ऐप को निःशुल्क रखते हैं।",
@@ -597,6 +609,12 @@ T["tamil"] = {
     "defaultGrid": "இயல்பு கட்டம்",
     "theme": "தீம்",
     "ivoryCourtyard": "ஐவரி முற்றம்",
+    "chooseTheme": "நிறத் தீம்",
+    "themeMidnight": "நள்ளிரவு நீலம்",
+    "themeLotusBlush": "தாமரைப் பிங்க்",
+    "themeKeralaGreen": "கேரளத் தோட்டம்",
+    "themeDeepavaliGold": "தீபாவளிப் பொன்",
+    "themeTerracottaClay": "செங்கல் முற்றம்",
     "about": "பற்றி",
     "aboutApp": "டிரடிஷனல் ரங்கோலி தமிழ்க் கோலம் மற்றும் இந்திய ரங்கோலிக்கு முற்ற ஆசிரியர். படைப்பு இந்தச் சாதனத்திலேயே இருக்கும்.",
     "adsNote": "விளம்பரங்கள் இந்த ஆப்பை இலவசமாக வைக்கின்றன.",
@@ -955,6 +973,33 @@ T["sanskrit"] = core(
 )
 T["sanskrit"]["continue"] = T["sanskrit"].pop("continue_")
 
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parent))
+from l10n_full import FULL, MUST_TRANSLATE, ALLOW_SAME_LATIN, LATIN_LANGS  # noqa: E402
+
+SCREEN_KEYS = [
+    "exploreCollections", "kolamLessons", "kolamLessonsSub",
+    "familyPulli", "familySikku", "familyFreehand", "familyGeometric", "familyFloral",
+    "themeLotus", "themePeacock", "themeDiya",
+    "festivalPongal", "festivalDiwali", "festivalNavratri", "festivalOnam", "festivalUgadi", "festivalNewYear",
+    "exploreSubtitle", "searchHint", "sectionTraditional", "sectionThemes", "sectionFestivals",
+    "pulliNxN", "stepsCount",
+    "headlineOnam", "headlinePongal", "headlineDiwali", "headlineNavratri", "headlineUgadi", "headlineNewYear", "headlineThreshold",
+    "myCreations", "favorites", "emptyGalleryTitle", "emptyGallerySub", "createRangoli",
+    "emptyFavTitle", "emptyFavSub", "explorePatterns",
+    "pattern.onam-pookalam.title", "pattern.onam-pookalam.note",
+    "chooseTheme", "themeMidnight", "themeLotusBlush", "themeKeralaGreen", "themeDeepavaliGold",
+    "themeTerracottaClay", "ivoryCourtyard",
+]
+
+STRICT_LANGS = {
+    "hindi", "tamil", "telugu", "kannada", "malayalam",
+    "chinese", "japanese", "spanish", "french", "german", "portuguese", "indonesian",
+}
+
+for _lang, _rows in FULL.items():
+    T.setdefault(_lang, {}).update(_rows)
+
 
 def esc(s: str) -> str:
     return s.replace("\\", "\\\\").replace('"', '\\"')
@@ -986,4 +1031,27 @@ def emit() -> str:
 
 
 ROOT.write_text(emit(), encoding="utf-8")
+
+def _check() -> None:
+    leftover: list[str] = []
+    for lang in LANGS:
+        if lang == "english":
+            continue
+        merged = dict(EN)
+        merged.update(T.get(lang, {}))
+        required = MUST_TRANSLATE if lang in STRICT_LANGS else SCREEN_KEYS
+        for key in required:
+            got = merged.get(key, EN.get(key, ""))
+            en = EN.get(key, "")
+            if got == en:
+                if lang in LATIN_LANGS and key in ALLOW_SAME_LATIN:
+                    continue
+                leftover.append(f"{lang}:{key}")
+    if leftover:
+        preview = "\n".join(leftover[:40])
+        raise SystemExit(f"{len(leftover)} English leftovers\n{preview}")
+
+
+_check()
 print("wrote", ROOT, "bytes", ROOT.stat().st_size)
+print("l10n check ok")

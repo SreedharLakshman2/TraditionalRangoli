@@ -15,15 +15,17 @@ struct RangoliCard: View {
                     RoundedRectangle(cornerRadius: 20, style: .continuous)
                         .stroke(RangoliColor.gold.opacity(0.35), lineWidth: 1)
                 )
-            Text(pattern.tamilTitle)
-                .font(RangoliFont.tamil(large ? 17 : 15))
+            Text(pattern.localizedTitle(language.language))
+                .font(language.language == .tamil ? RangoliFont.tamil(large ? 17 : 15) : RangoliFont.headline(large ? 18 : 16))
                 .foregroundStyle(RangoliColor.ink)
                 .lineLimit(2)
                 .minimumScaleFactor(0.8)
-            Text(pattern.localizedTitle(language.language))
-                .font(RangoliFont.caption(12))
-                .foregroundStyle(RangoliColor.muted)
-                .lineLimit(1)
+            if language.language == .tamil {
+                Text(pattern.title)
+                    .font(RangoliFont.caption(12))
+                    .foregroundStyle(RangoliColor.muted)
+                    .lineLimit(1)
+            }
             HStack(spacing: 8) {
                 MetaChip(text: pattern.family.localizedTitle(language.language))
                 MetaChip(text: "\(pattern.gridSize) × \(pattern.gridSize)")
@@ -32,7 +34,7 @@ struct RangoliCard: View {
         .padding(14)
         .paperCard(radius: RangoliRadius.lg)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(pattern.tamilTitle), \(pattern.title), \(pattern.family.title)")
+        .accessibilityLabel("\(pattern.localizedTitle(language.language)), \(pattern.family.localizedTitle(language.language))")
     }
 }
 

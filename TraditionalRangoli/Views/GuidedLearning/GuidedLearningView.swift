@@ -69,7 +69,7 @@ struct GuidedLearningView: View {
                 .padding(.top, 8)
             }
         }
-        .preferredColorScheme(.light)
+        .preferredColorScheme(CourtyardColorTheme.current.colorScheme)
         .fullScreenCover(item: $completed) { art in
             CompletionView(artwork: art, pattern: pattern) {
                 completed = nil
@@ -139,14 +139,16 @@ struct GuidedLearningView: View {
             .accessibilityLabel(language.t("close"))
             Spacer()
             VStack(spacing: 2) {
-                Text(pattern.tamilTitle)
-                    .font(RangoliFont.tamil(16))
+                Text(pattern.localizedTitle(language.language))
+                    .font(language.language == .tamil ? RangoliFont.tamil(16) : RangoliFont.headline(16))
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
-                Text(pattern.localizedTitle(language.language))
-                    .font(RangoliFont.caption(11))
-                    .foregroundStyle(RangoliColor.muted)
-                    .lineLimit(1)
+                if language.language == .tamil {
+                    Text(pattern.title)
+                        .font(RangoliFont.caption(11))
+                        .foregroundStyle(RangoliColor.muted)
+                        .lineLimit(1)
+                }
             }
             Spacer()
             Color.clear.frame(width: 40, height: 40)

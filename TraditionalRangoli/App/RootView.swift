@@ -52,7 +52,7 @@ struct TraditionalRangoliAppRoot: View {
                 .zIndex(1)
             }
         }
-        .preferredColorScheme(.light)
+        .preferredColorScheme(settings.colorTheme.colorScheme)
         .sheet(isPresented: onboardingBinding) {
             OnboardingView()
                 .interactiveDismissDisabled()

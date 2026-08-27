@@ -1,27 +1,176 @@
 import SwiftUI
 import UIKit
 
+struct CourtyardPalette: Equatable {
+    let ivoryHex: UInt32
+    let paperHex: UInt32
+    let clayHex: UInt32
+    let floorDeepHex: UInt32
+    let floorMidHex: UInt32
+    let floorLightHex: UInt32
+    let primaryHex: UInt32
+    let maroonHex: UInt32
+    let terracottaHex: UInt32
+    let secondaryHex: UInt32
+    let goldHex: UInt32
+    let goldSoftHex: UInt32
+    let greenHex: UInt32
+    let leafHex: UInt32
+    let inkHex: UInt32
+    let mutedHex: UInt32
+    let riceHex: UInt32
+    let powderWhiteHex: UInt32
+    let onAccentHex: UInt32
+    let cardWashHex: UInt32
+
+    var ivory: Color { Color(hex: ivoryHex) }
+    var paper: Color { Color(hex: paperHex) }
+    var clay: Color { Color(hex: clayHex) }
+    var floorDeep: Color { Color(hex: floorDeepHex) }
+    var floorMid: Color { Color(hex: floorMidHex) }
+    var floorLight: Color { Color(hex: floorLightHex) }
+    var primary: Color { Color(hex: primaryHex) }
+    var maroon: Color { Color(hex: maroonHex) }
+    var terracotta: Color { Color(hex: terracottaHex) }
+    var secondary: Color { Color(hex: secondaryHex) }
+    var gold: Color { Color(hex: goldHex) }
+    var goldSoft: Color { Color(hex: goldSoftHex) }
+    var green: Color { Color(hex: greenHex) }
+    var leaf: Color { Color(hex: leafHex) }
+    var ink: Color { Color(hex: inkHex) }
+    var muted: Color { Color(hex: mutedHex) }
+    var rice: Color { Color(hex: riceHex) }
+    var powderWhite: Color { Color(hex: powderWhiteHex) }
+    var onAccent: Color { Color(hex: onAccentHex) }
+    var cardWash: Color { Color(hex: cardWashHex) }
+}
+
+enum CourtyardColorTheme: String, CaseIterable, Identifiable {
+    case ivoryCourtyard
+    case midnightIndigo
+    case lotusBlush
+    case keralaGreen
+    case deepavaliGold
+    case terracottaClay
+
+    var id: String { rawValue }
+
+    var l10nKey: String {
+        switch self {
+        case .ivoryCourtyard: return "ivoryCourtyard"
+        case .midnightIndigo: return "themeMidnight"
+        case .lotusBlush: return "themeLotusBlush"
+        case .keralaGreen: return "themeKeralaGreen"
+        case .deepavaliGold: return "themeDeepavaliGold"
+        case .terracottaClay: return "themeTerracottaClay"
+        }
+    }
+
+    var colorScheme: ColorScheme {
+        self == .midnightIndigo ? .dark : .light
+    }
+
+    static let storageKey = "rangoli.colorTheme"
+    static var cached: CourtyardColorTheme?
+
+    static var current: CourtyardColorTheme {
+        if let cached { return cached }
+        let raw = UserDefaults.standard.string(forKey: storageKey) ?? ivoryCourtyard.rawValue
+        let value = CourtyardColorTheme(rawValue: raw) ?? .ivoryCourtyard
+        cached = value
+        return value
+    }
+
+    static func setCurrent(_ theme: CourtyardColorTheme) {
+        cached = theme
+        UserDefaults.standard.set(theme.rawValue, forKey: storageKey)
+    }
+
+    var palette: CourtyardPalette {
+        let clayFloor = (deep: UInt32(0x6A3A22), mid: UInt32(0x8A5333), light: UInt32(0xB07A4C), clay: UInt32(0xC48A5A))
+        switch self {
+        case .ivoryCourtyard:
+            return CourtyardPalette(
+                ivoryHex: 0xFFF8EE, paperHex: 0xFFFCF6, clayHex: clayFloor.clay,
+                floorDeepHex: clayFloor.deep, floorMidHex: clayFloor.mid, floorLightHex: clayFloor.light,
+                primaryHex: 0x9B2C2C, maroonHex: 0x6B1D1D, terracottaHex: 0xC45C2A,
+                secondaryHex: 0xD97706, goldHex: 0xC89B3C, goldSoftHex: 0xE8C56B,
+                greenHex: 0x3F6B4F, leafHex: 0x5C8A64, inkHex: 0x2D241F, mutedHex: 0x806F63,
+                riceHex: 0xF7F1E3, powderWhiteHex: 0xFFF8E7, onAccentHex: 0xFFF8EE, cardWashHex: 0xF3E6D0
+            )
+        case .midnightIndigo:
+            return CourtyardPalette(
+                ivoryHex: 0x161426, paperHex: 0x1E1C32, clayHex: clayFloor.clay,
+                floorDeepHex: clayFloor.deep, floorMidHex: clayFloor.mid, floorLightHex: clayFloor.light,
+                primaryHex: 0xC9A227, maroonHex: 0x8C6B2A, terracottaHex: 0xD4784A,
+                secondaryHex: 0x7C9CFF, goldHex: 0xE8C56B, goldSoftHex: 0xF3DEA0,
+                greenHex: 0x7CB89A, leafHex: 0x9FD4B5, inkHex: 0xF4EDE0, mutedHex: 0xB8A99A,
+                riceHex: 0x2A2740, powderWhiteHex: 0xF7F1E3, onAccentHex: 0x161426, cardWashHex: 0x252248
+            )
+        case .lotusBlush:
+            return CourtyardPalette(
+                ivoryHex: 0xFFF5F7, paperHex: 0xFFFCFC, clayHex: clayFloor.clay,
+                floorDeepHex: clayFloor.deep, floorMidHex: clayFloor.mid, floorLightHex: clayFloor.light,
+                primaryHex: 0xB83B5E, maroonHex: 0x7A2440, terracottaHex: 0xD46A7A,
+                secondaryHex: 0xE8A0B0, goldHex: 0xD4A574, goldSoftHex: 0xE8C4A0,
+                greenHex: 0x4F7A5C, leafHex: 0x6B9A78, inkHex: 0x3A242C, mutedHex: 0x8A6B74,
+                riceHex: 0xFFF0F3, powderWhiteHex: 0xFFF8F9, onAccentHex: 0xFFF5F7, cardWashHex: 0xF8DCE4
+            )
+        case .keralaGreen:
+            return CourtyardPalette(
+                ivoryHex: 0xF4F8F0, paperHex: 0xFBFFF8, clayHex: clayFloor.clay,
+                floorDeepHex: clayFloor.deep, floorMidHex: clayFloor.mid, floorLightHex: clayFloor.light,
+                primaryHex: 0x1F6B4A, maroonHex: 0x145238, terracottaHex: 0xC45C2A,
+                secondaryHex: 0xE3B23C, goldHex: 0xC9A227, goldSoftHex: 0xE8C56B,
+                greenHex: 0x2F7A4E, leafHex: 0x5C8A64, inkHex: 0x1E2A22, mutedHex: 0x5E7364,
+                riceHex: 0xEEF5E8, powderWhiteHex: 0xF7FBF2, onAccentHex: 0xF4F8F0, cardWashHex: 0xDCE8D0
+            )
+        case .deepavaliGold:
+            return CourtyardPalette(
+                ivoryHex: 0xFFF6E8, paperHex: 0xFFFBF3, clayHex: clayFloor.clay,
+                floorDeepHex: clayFloor.deep, floorMidHex: clayFloor.mid, floorLightHex: clayFloor.light,
+                primaryHex: 0x7A1010, maroonHex: 0x4A0000, terracottaHex: 0xC45C2A,
+                secondaryHex: 0xE8B923, goldHex: 0xE0B000, goldSoftHex: 0xF2D36B,
+                greenHex: 0x3F6B4F, leafHex: 0x5C8A64, inkHex: 0x2A1810, mutedHex: 0x8A6B4A,
+                riceHex: 0xFFF3D6, powderWhiteHex: 0xFFF8E7, onAccentHex: 0xFFF6E8, cardWashHex: 0xF3D9A0
+            )
+        case .terracottaClay:
+            return CourtyardPalette(
+                ivoryHex: 0xFBF3EA, paperHex: 0xFFF9F3, clayHex: clayFloor.clay,
+                floorDeepHex: clayFloor.deep, floorMidHex: clayFloor.mid, floorLightHex: clayFloor.light,
+                primaryHex: 0xC44B1F, maroonHex: 0x8A3014, terracottaHex: 0xC45C2A,
+                secondaryHex: 0xE07A3A, goldHex: 0xD4A017, goldSoftHex: 0xE8C46A,
+                greenHex: 0x4A6B3F, leafHex: 0x6A8A5C, inkHex: 0x2F2218, mutedHex: 0x8A6F5A,
+                riceHex: 0xF7E6D4, powderWhiteHex: 0xFFF4E8, onAccentHex: 0xFBF3EA, cardWashHex: 0xEED3B8
+            )
+        }
+    }
+}
+
 enum RangoliColor {
-    static let ivory = Color(hex: 0xFFF8EE)
-    static let paper = Color(hex: 0xFFFCF6)
-    static let clay = Color(hex: 0xC48A5A)
-    static let floorDeep = Color(hex: 0x6A3A22)
-    static let floorMid = Color(hex: 0x8A5333)
-    static let floorLight = Color(hex: 0xB07A4C)
-    static let primary = Color(hex: 0x9B2C2C)
-    static let maroon = Color(hex: 0x6B1D1D)
-    static let terracotta = Color(hex: 0xC45C2A)
-    static let secondary = Color(hex: 0xD97706)
-    static let gold = Color(hex: 0xC89B3C)
-    static let goldSoft = Color(hex: 0xE8C56B)
-    static let green = Color(hex: 0x3F6B4F)
-    static let leaf = Color(hex: 0x5C8A64)
-    static let ink = Color(hex: 0x2D241F)
-    static let muted = Color(hex: 0x806F63)
-    static let rice = Color(hex: 0xF7F1E3)
-    static let powderWhite = Color(hex: 0xFFF8E7)
-    static let stroke = Color.black.opacity(0.08)
-    static let onAccent = Color(hex: 0xFFF8EE)
+    private static var palette: CourtyardPalette { CourtyardColorTheme.current.palette }
+
+    static var ivory: Color { palette.ivory }
+    static var paper: Color { palette.paper }
+    static var clay: Color { palette.clay }
+    static var floorDeep: Color { palette.floorDeep }
+    static var floorMid: Color { palette.floorMid }
+    static var floorLight: Color { palette.floorLight }
+    static var primary: Color { palette.primary }
+    static var maroon: Color { palette.maroon }
+    static var terracotta: Color { palette.terracotta }
+    static var secondary: Color { palette.secondary }
+    static var gold: Color { palette.gold }
+    static var goldSoft: Color { palette.goldSoft }
+    static var green: Color { palette.green }
+    static var leaf: Color { palette.leaf }
+    static var ink: Color { palette.ink }
+    static var muted: Color { palette.muted }
+    static var rice: Color { palette.rice }
+    static var powderWhite: Color { palette.powderWhite }
+    static var stroke: Color { Color.black.opacity(0.08) }
+    static var onAccent: Color { palette.onAccent }
+    static var cardWash: Color { palette.cardWash }
 
     static let brand = "Traditional Rangoli"
     static let company = "Sai Laksha Technologies"
@@ -264,6 +413,11 @@ enum CourtyardLayout {
     static func achievementColumns(regular: Bool) -> [GridItem] {
         let count = regular ? 4 : 2
         return Array(repeating: GridItem(.flexible()), count: count)
+    }
+
+    static func languageColumns(regular: Bool) -> [GridItem] {
+        let count = regular ? 4 : 2
+        return Array(repeating: GridItem(.flexible(), spacing: 10), count: count)
     }
 
     static func createColumns(regular: Bool) -> [GridItem] {

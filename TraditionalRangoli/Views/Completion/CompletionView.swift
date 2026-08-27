@@ -90,7 +90,7 @@ struct CompletionView: View {
             }
             .courtyardColumn()
         }
-        .preferredColorScheme(.light)
+        .preferredColorScheme(settings.colorTheme.colorScheme)
         .onAppear {
             settings.award(pattern: pattern)
             withAnimation(.easeOut(duration: 0.9)) {

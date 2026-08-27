@@ -15,6 +15,9 @@ final class SettingsStore: ObservableObject {
     @Published var defaultGrid: Int {
         didSet { defaults.set(defaultGrid, forKey: Keys.grid) }
     }
+    @Published var colorTheme: CourtyardColorTheme {
+        didSet { CourtyardColorTheme.setCurrent(colorTheme) }
+    }
 
     private let defaults = UserDefaults.standard
 
@@ -31,6 +34,7 @@ final class SettingsStore: ObservableObject {
         static let lastDay = "rangoli.lastDay"
         static let favorites = "rangoli.favoritePatterns"
         static let style = "rangoli.style"
+        static let colorTheme = CourtyardColorTheme.storageKey
     }
 
     init() {
@@ -38,6 +42,9 @@ final class SettingsStore: ObservableObject {
         hapticsEnabled = defaults.object(forKey: Keys.haptics) as? Bool ?? true
         showGuides = defaults.object(forKey: Keys.guides) as? Bool ?? true
         defaultGrid = defaults.object(forKey: Keys.grid) as? Int ?? 9
+        let themeRaw = defaults.string(forKey: Keys.colorTheme) ?? CourtyardColorTheme.ivoryCourtyard.rawValue
+        colorTheme = CourtyardColorTheme(rawValue: themeRaw) ?? .ivoryCourtyard
+        CourtyardColorTheme.cached = colorTheme
     }
 
     var hasSeenOnboarding: Bool {
@@ -141,6 +148,8 @@ final class SettingsStore: ObservableObject {
         soundEnabled = false
         showGuides = true
         defaultGrid = 9
+        colorTheme = .ivoryCourtyard
+        CourtyardColorTheme.setCurrent(.ivoryCourtyard)
     }
 }
 

@@ -111,6 +111,10 @@ enum AppLanguage: String, CaseIterable, Identifiable, Codable {
         "\(nativeName) \(englishName) \(code)".lowercased()
     }
 
+    var monogram: String {
+        String(nativeName.prefix(1))
+    }
+
     static var indianLanguages: [AppLanguage] {
         let rest = allCases.filter { $0.isIndian && $0 != .tamil }
         return [.tamil] + rest

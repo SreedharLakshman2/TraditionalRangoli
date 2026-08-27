@@ -36,7 +36,7 @@ struct ExploreView: View {
         .padding(14)
         .background(RangoliColor.paper, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
         .goldFrame(cornerRadius: 16)
-        .accessibilityLabel("Search patterns")
+        .accessibilityLabel(language.t("searchHint"))
     }
 
     private var familySection: some View {

@@ -20,7 +20,7 @@ struct OnboardingView: View {
                 teachingPage
             }
         }
-        .preferredColorScheme(.light)
+        .preferredColorScheme(settings.colorTheme.colorScheme)
     }
 
     private var languagePage: some View {

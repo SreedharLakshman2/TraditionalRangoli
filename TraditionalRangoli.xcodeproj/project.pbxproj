@@ -12,6 +12,7 @@
 
 /* Begin PBXFileReference section */
 		A10000000000000000000002 /* TraditionalRangoli.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TraditionalRangoli.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A200TEST00000000000001 /* TraditionalRangoliTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TraditionalRangoliTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -33,6 +34,11 @@
 			path = TraditionalRangoli;
 			sourceTree = "<group>";
 		};
+		A200TEST00000000000002 /* TraditionalRangoliTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = TraditionalRangoliTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +50,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A200TEST00000000000005 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -51,6 +64,7 @@
 			isa = PBXGroup;
 			children = (
 				A10000000000000000000001 /* TraditionalRangoli */,
+				A200TEST00000000000002 /* TraditionalRangoliTests */,
 				A10000000000000000000005 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -59,6 +73,7 @@
 			isa = PBXGroup;
 			children = (
 				A10000000000000000000002 /* TraditionalRangoli.app */,
+				A200TEST00000000000001 /* TraditionalRangoliTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -89,6 +104,27 @@
 			productReference = A10000000000000000000002 /* TraditionalRangoli.app */;
 			productType = "com.apple.product-type.application";
 		};
+		A200TEST00000000000003 /* TraditionalRangoliTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A200TEST00000000000009 /* Build configuration list for PBXNativeTarget "TraditionalRangoliTests" */;
+			buildPhases = (
+				A200TEST00000000000004 /* Sources */,
+				A200TEST00000000000005 /* Frameworks */,
+				A200TEST00000000000006 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A200TEST00000000000011 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				A200TEST00000000000002 /* TraditionalRangoliTests */,
+			);
+			name = TraditionalRangoliTests;
+			productName = TraditionalRangoliTests;
+			productReference = A200TEST00000000000001 /* TraditionalRangoliTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -101,6 +137,10 @@
 				TargetAttributes = {
 					A10000000000000000000006 = {
 						CreatedOnToolsVersion = 26.0;
+					};
+					A200TEST00000000000003 = {
+						CreatedOnToolsVersion = 26.0;
+						TestTargetID = A10000000000000000000006;
 					};
 				};
 			};
@@ -122,12 +162,20 @@
 			projectRoot = "";
 			targets = (
 				A10000000000000000000006 /* TraditionalRangoli */,
+				A200TEST00000000000003 /* TraditionalRangoliTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		A10000000000000000000008 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A200TEST00000000000006 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -144,7 +192,32 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A200TEST00000000000004 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXContainerItemProxy section */
+		A200TEST00000000000010 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A10000000000000000000009 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A10000000000000000000006;
+			remoteInfo = TraditionalRangoli;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXTargetDependency section */
+		A200TEST00000000000011 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A10000000000000000000006 /* TraditionalRangoli */;
+			targetProxy = A200TEST00000000000010 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		A10000000000000000000012 /* Debug */ = {
@@ -338,6 +411,50 @@
 			};
 			name = Release;
 		};
+		A200TEST00000000000007 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7DS2M392U2;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sreedhar.TraditionalRangoliTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TraditionalRangoli.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TraditionalRangoli";
+			};
+			name = Debug;
+		};
+		A200TEST00000000000008 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7DS2M392U2;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sreedhar.TraditionalRangoliTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TraditionalRangoli.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TraditionalRangoli";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -355,6 +472,15 @@
 			buildConfigurations = (
 				A10000000000000000000012 /* Debug */,
 				A10000000000000000000013 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A200TEST00000000000009 /* Build configuration list for PBXNativeTarget "TraditionalRangoliTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A200TEST00000000000007 /* Debug */,
+				A200TEST00000000000008 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

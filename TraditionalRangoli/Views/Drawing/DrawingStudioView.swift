@@ -47,7 +47,7 @@ struct DrawingStudioView: View {
                 .padding(.top, 8)
             }
         }
-        .preferredColorScheme(.light)
+        .preferredColorScheme(settings.colorTheme.colorScheme)
         .fullScreenCover(isPresented: $coloring) {
             ColoringView(session: session) {
                 coloring = false
