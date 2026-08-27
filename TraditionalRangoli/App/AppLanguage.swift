@@ -121,38 +121,8 @@ enum AppLanguage: String, CaseIterable, Identifiable, Codable {
     }
 
     static var worldLanguages: [AppLanguage] {
-        allCases.filter { !$0.isIndian }
-    }
-
-    static func fromDevice() -> AppLanguage {
-        for preferred in Locale.preferredLanguages {
-            let code = Locale(identifier: preferred).language.languageCode?.identifier ?? ""
-            switch code {
-            case "hi": return .hindi
-            case "ta": return .tamil
-            case "te": return .telugu
-            case "kn": return .kannada
-            case "ml": return .malayalam
-            case "mr": return .marathi
-            case "gu": return .gujarati
-            case "bn": return .bengali
-            case "pa": return .punjabi
-            case "or": return .odia
-            case "as": return .assamese
-            case "ne": return .nepali
-            case "sa": return .sanskrit
-            case "es": return .spanish
-            case "fr": return .french
-            case "de": return .german
-            case "pt": return .portuguese
-            case "id": return .indonesian
-            case "ja": return .japanese
-            case "zh": return .chinese
-            case "en": return .english
-            default: continue
-            }
-        }
-        return .english
+        let rest = allCases.filter { !$0.isIndian && $0 != .english }
+        return [.english] + rest
     }
 }
 
@@ -169,7 +139,7 @@ final class LanguageStore: ObservableObject {
            let value = AppLanguage(rawValue: raw) {
             language = value
         } else {
-            language = AppLanguage.fromDevice()
+            language = .english
         }
     }
 

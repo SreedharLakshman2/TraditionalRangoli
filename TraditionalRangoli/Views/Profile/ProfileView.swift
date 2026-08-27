@@ -156,26 +156,28 @@ struct ProfileView: View {
                                 Circle().fill(theme.palette.primary).frame(width: 16, height: 16)
                                 Circle().fill(theme.palette.gold).frame(width: 16, height: 16)
                                 Circle().fill(theme.palette.paper).frame(width: 16, height: 16)
-                                    .overlay(Circle().stroke(RangoliColor.ink.opacity(0.15), lineWidth: 1))
+                                    .overlay(Circle().stroke(theme.palette.ink.opacity(0.18), lineWidth: 1))
                                 Spacer()
-                                if settings.colorTheme == theme {
-                                    Image(systemName: "checkmark.circle.fill")
-                                        .foregroundStyle(theme.palette.primary)
-                                }
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundStyle(theme.palette.primary)
+                                    .opacity(settings.colorTheme == theme ? 1 : 0)
                             }
                             Text(theme.localizedTitle(language.language))
                                 .font(RangoliFont.caption(12))
-                                .foregroundStyle(RangoliColor.ink)
+                                .foregroundStyle(theme.palette.ink)
                                 .lineLimit(2)
                                 .minimumScaleFactor(0.8)
                                 .multilineTextAlignment(.leading)
                         }
                         .padding(12)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(maxWidth: .infinity, minHeight: 88, alignment: .topLeading)
                         .background(theme.palette.ivory, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
                         .overlay(
                             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                .stroke(settings.colorTheme == theme ? theme.palette.primary : RangoliColor.stroke, lineWidth: settings.colorTheme == theme ? 2 : 1)
+                                .strokeBorder(
+                                    settings.colorTheme == theme ? theme.palette.primary : theme.palette.ink.opacity(0.14),
+                                    lineWidth: settings.colorTheme == theme ? 2 : 1
+                                )
                         )
                     }
                     .buttonStyle(.plain)

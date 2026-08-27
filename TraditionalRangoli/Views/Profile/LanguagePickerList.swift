@@ -25,11 +25,11 @@ struct LanguagePickerList: View {
             if !isSearching {
                 currentCard
             }
-            if !filteredIndian.isEmpty {
-                languageSection(title: language.t("indianLanguages"), languages: filteredIndian)
-            }
             if !filteredWorld.isEmpty {
                 languageSection(title: language.t("worldLanguages"), languages: filteredWorld)
+            }
+            if !filteredIndian.isEmpty {
+                languageSection(title: language.t("indianLanguages"), languages: filteredIndian)
             }
         }
     }
@@ -122,26 +122,24 @@ struct LanguagePickerList: View {
                             Circle().fill(selected ? RangoliColor.primary : RangoliColor.primary.opacity(0.10))
                         )
                     Spacer(minLength: 0)
-                    if selected {
-                        Image(systemName: "checkmark.circle.fill")
-                            .font(.system(size: 16, weight: .semibold))
-                            .foregroundStyle(RangoliColor.primary)
-                    }
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(RangoliColor.primary)
+                        .opacity(selected ? 1 : 0)
                 }
                 Text(lang.nativeName)
                     .font(lang.usesLatinScript ? RangoliFont.headline(16) : RangoliFont.tamil(16))
                     .foregroundStyle(RangoliColor.ink)
                     .lineLimit(1)
                     .minimumScaleFactor(0.65)
-                if lang.nativeName != lang.englishName {
-                    Text(lang.englishName)
-                        .font(RangoliFont.caption(12))
-                        .foregroundStyle(RangoliColor.muted)
-                        .lineLimit(1)
-                }
+                Text(lang.englishName)
+                    .font(RangoliFont.caption(12))
+                    .foregroundStyle(RangoliColor.muted)
+                    .lineLimit(1)
+                    .opacity(lang.nativeName == lang.englishName ? 0 : 1)
             }
             .padding(12)
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             .background(
                 LinearGradient(
                     colors: selected
@@ -154,16 +152,12 @@ struct LanguagePickerList: View {
             )
             .overlay(
                 RoundedRectangle(cornerRadius: RangoliRadius.md, style: .continuous)
-                    .stroke(
+                    .strokeBorder(
                         selected ? RangoliColor.gold : RangoliColor.gold.opacity(0.28),
-                        lineWidth: selected ? 1.6 : 1
+                        lineWidth: selected ? 1.5 : 1
                     )
             )
-            .shadow(
-                color: selected ? RangoliColor.primary.opacity(0.12) : Color.black.opacity(0.04),
-                radius: selected ? 10 : 6,
-                y: 4
-            )
+            .shadow(color: Color.black.opacity(0.04), radius: 6, y: 4)
         }
         .buttonStyle(PressScaleStyle())
         .accessibilityLabel("\(lang.nativeName), \(lang.englishName)")

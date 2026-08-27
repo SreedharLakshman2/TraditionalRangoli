@@ -34,6 +34,20 @@ final class ColorThemeTests: XCTestCase {
         XCTAssertNotEqual(CourtyardColorTheme.midnightIndigo.localizedTitle(.chinese), CourtyardColorTheme.midnightIndigo.localizedTitle(.english))
         XCTAssertEqual(CourtyardColorTheme.allCases.count, 6)
     }
+
+    func testEachThemePreviewUsesItsOwnInkOnIvory() {
+        for theme in CourtyardColorTheme.allCases {
+            XCTAssertNotEqual(
+                theme.palette.inkHex,
+                theme.palette.ivoryHex,
+                "\(theme.rawValue) ink matches its ivory, so the picker label would vanish"
+            )
+        }
+        XCTAssertNotEqual(
+            CourtyardColorTheme.midnightIndigo.palette.inkHex,
+            CourtyardColorTheme.ivoryCourtyard.palette.inkHex
+        )
+    }
 }
 
 final class LanguagePickerTests: XCTestCase {
@@ -48,5 +62,10 @@ final class LanguagePickerTests: XCTestCase {
         XCTAssertEqual(AppLanguage.indianLanguages.first, .tamil)
         XCTAssertFalse(AppLanguage.worldLanguages.contains(.tamil))
         XCTAssertTrue(AppLanguage.worldLanguages.contains(.english))
+    }
+
+    func testDefaultAndLandingLanguageIsEnglish() {
+        XCTAssertEqual(AppLanguage.worldLanguages.first, .english)
+        XCTAssertEqual(AppLanguage.english.code, "en")
     }
 }

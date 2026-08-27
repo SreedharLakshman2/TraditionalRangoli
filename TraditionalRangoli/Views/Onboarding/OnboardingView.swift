@@ -21,6 +21,11 @@ struct OnboardingView: View {
             }
         }
         .preferredColorScheme(settings.colorTheme.colorScheme)
+        .onAppear {
+            if page == 0 {
+                language.language = .english
+            }
+        }
     }
 
     private var languagePage: some View {
