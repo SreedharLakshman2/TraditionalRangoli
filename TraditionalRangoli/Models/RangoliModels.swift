@@ -67,7 +67,7 @@ enum Festival: String, Codable, CaseIterable, Identifiable {
     var title: String {
         switch self {
         case .pongal: return "Pongal"
-        case .diwali: return "Diwali"
+        case .diwali: return "Deepavali"
         case .navratri: return "Navratri"
         case .onam: return "Onam"
         case .ugadi: return "Ugadi"

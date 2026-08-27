@@ -4,17 +4,18 @@ import UIKit
 struct SavedView: View {
     @EnvironmentObject private var artworks: ArtworkStore
     @EnvironmentObject private var router: AppRouter
+    @EnvironmentObject private var language: LanguageStore
     @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var segment = 0
 
     var body: some View {
         VStack(spacing: 16) {
-            SectionHeader(title: "My Rangolis")
+            SectionHeader(title: language.t("savedTitle"))
                 .padding(.horizontal, 20)
                 .padding(.top, 8)
-            Picker("Gallery", selection: $segment) {
-                Text("My Creations").tag(0)
-                Text("Favorites").tag(1)
+            Picker("", selection: $segment) {
+                Text(language.t("myCreations")).tag(0)
+                Text(language.t("favorites")).tag(1)
             }
             .pickerStyle(.segmented)
             .padding(.horizontal, 20)
@@ -24,17 +25,17 @@ struct SavedView: View {
                 Spacer()
                 if segment == 0 {
                     EmptyGallery(
-                        title: "Your rangoli gallery is waiting.",
-                        subtitle: "Create your first traditional rangoli.",
-                        button: "Create Rangoli"
+                        title: language.t("emptyGalleryTitle"),
+                        subtitle: language.t("emptyGallerySub"),
+                        button: language.t("createRangoli")
                     ) {
                         router.tab = .create
                     }
                 } else {
                     EmptyGallery(
-                        title: "Save patterns you love.",
-                        subtitle: "Favorite a courtyard piece to keep it close.",
-                        button: "Explore Patterns"
+                        title: language.t("emptyFavTitle"),
+                        subtitle: language.t("emptyFavSub"),
+                        button: language.t("explorePatterns")
                     ) {
                         router.tab = .explore
                     }
@@ -113,6 +114,7 @@ struct ArtworkDetailView: View {
     let artwork: UserArtwork
     @EnvironmentObject private var artworks: ArtworkStore
     @EnvironmentObject private var router: AppRouter
+    @EnvironmentObject private var language: LanguageStore
     @Environment(\.dismiss) private var dismiss
     @State private var shareURL: URL?
 
@@ -131,15 +133,15 @@ struct ArtworkDetailView: View {
                     .foregroundStyle(RangoliColor.muted)
                 if let url = shareURL {
                     ShareLink(item: url) {
-                        label("Share", "square.and.arrow.up")
+                        label(language.t("share"), "square.and.arrow.up")
                     }
                     .courtyardControls()
                 }
-                RangoliSecondaryButton(title: "Continue Editing", icon: "pencil.tip") {
+                RangoliSecondaryButton(title: language.t("continueEditing"), icon: "pencil.tip") {
                     router.studio = StudioRoute(kind: .continueArtwork(artwork))
                 }
                 .courtyardControls()
-                RangoliSecondaryButton(title: "Duplicate", icon: "plus.square.on.square") {
+                RangoliSecondaryButton(title: language.t("duplicate"), icon: "plus.square.on.square") {
                     artworks.duplicate(artwork)
                 }
                 .courtyardControls()
@@ -147,7 +149,7 @@ struct ArtworkDetailView: View {
                     artworks.delete(artwork)
                     dismiss()
                 } label: {
-                    label("Delete", "trash")
+                    label(language.t("delete"), "trash")
                 }
                 .courtyardControls()
             }

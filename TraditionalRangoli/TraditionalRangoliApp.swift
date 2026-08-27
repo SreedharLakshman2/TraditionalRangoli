@@ -6,6 +6,7 @@ struct TraditionalRangoliApp: App {
     @StateObject private var artworks: ArtworkStore
     @StateObject private var router: AppRouter
     @StateObject private var ads: AdsManager
+    @StateObject private var language: LanguageStore
 
     init() {
         let settings = SettingsStore()
@@ -25,6 +26,7 @@ struct TraditionalRangoliApp: App {
         _artworks = StateObject(wrappedValue: artworks)
         _router = StateObject(wrappedValue: router)
         _ads = StateObject(wrappedValue: AdsManager.shared)
+        _language = StateObject(wrappedValue: LanguageStore.shared)
     }
 
     var body: some Scene {
@@ -40,6 +42,7 @@ struct TraditionalRangoliApp: App {
             .environmentObject(artworks)
             .environmentObject(router)
             .environmentObject(ads)
+            .environmentObject(language)
         }
     }
 }

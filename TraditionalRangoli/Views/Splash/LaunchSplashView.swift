@@ -4,6 +4,7 @@ struct LaunchSplashView: View {
     var onFinished: () -> Void
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.horizontalSizeClass) private var sizeClass
+    @EnvironmentObject private var language: LanguageStore
     @State private var drawn: CGFloat = 0
     @State private var glow = false
     @State private var appear = false
@@ -23,10 +24,10 @@ struct LaunchSplashView: View {
                         .shadow(color: RangoliColor.gold.opacity(0.3), radius: 18)
                 }
                 VStack(spacing: 8) {
-                    Text("Traditional Rangoli")
+                    Text(language.t("appName"))
                         .font(RangoliFont.display(30))
                         .foregroundStyle(RangoliColor.ink)
-                    Text("Courtyard art, drawn by hand")
+                    Text(language.t("tagline"))
                         .font(RangoliFont.body(15))
                         .foregroundStyle(RangoliColor.muted)
                 }

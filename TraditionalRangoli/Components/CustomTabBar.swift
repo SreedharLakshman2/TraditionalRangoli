@@ -28,6 +28,7 @@ enum AppTab: String, CaseIterable, Identifiable {
 
 struct CustomTabBar: View {
     @Binding var selection: AppTab
+    @EnvironmentObject private var language: LanguageStore
     @Namespace private var ns
 
     var body: some View {
@@ -51,15 +52,17 @@ struct CustomTabBar: View {
                                 .font(.system(size: tab == .create ? 16 : 15, weight: .semibold))
                                 .foregroundStyle(selection == tab ? RangoliColor.onAccent : RangoliColor.muted)
                         }
-                        Text(tab.title)
+                        Text(language.t(tab.l10nKey))
                             .font(RangoliFont.label(10))
                             .foregroundStyle(selection == tab ? RangoliColor.primary : RangoliColor.muted)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 8)
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel(tab.title)
+                .accessibilityLabel(language.t(tab.l10nKey))
                 .accessibilityAddTraits(selection == tab ? .isSelected : [])
             }
         }

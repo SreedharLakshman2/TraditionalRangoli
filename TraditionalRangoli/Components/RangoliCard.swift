@@ -3,6 +3,7 @@ import SwiftUI
 struct RangoliCard: View {
     let pattern: RangoliPattern
     var large: Bool = false
+    @EnvironmentObject private var language: LanguageStore
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -14,20 +15,24 @@ struct RangoliCard: View {
                     RoundedRectangle(cornerRadius: 20, style: .continuous)
                         .stroke(RangoliColor.gold.opacity(0.35), lineWidth: 1)
                 )
-            Text(pattern.title)
-                .font(RangoliFont.headline(large ? 18 : 16))
+            Text(pattern.tamilTitle)
+                .font(RangoliFont.tamil(large ? 17 : 15))
                 .foregroundStyle(RangoliColor.ink)
                 .lineLimit(2)
-                .minimumScaleFactor(0.9)
+                .minimumScaleFactor(0.8)
+            Text(pattern.localizedTitle(language.language))
+                .font(RangoliFont.caption(12))
+                .foregroundStyle(RangoliColor.muted)
+                .lineLimit(1)
             HStack(spacing: 8) {
-                MetaChip(text: pattern.difficulty.title)
-                MetaChip(text: "\(pattern.estimatedMinutes) min")
+                MetaChip(text: pattern.family.localizedTitle(language.language))
+                MetaChip(text: "\(pattern.gridSize) × \(pattern.gridSize)")
             }
         }
         .padding(14)
         .paperCard(radius: RangoliRadius.lg)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(pattern.title), \(pattern.difficulty.title), \(pattern.estimatedMinutes) minutes")
+        .accessibilityLabel("\(pattern.tamilTitle), \(pattern.title), \(pattern.family.title)")
     }
 }
 
@@ -96,6 +101,7 @@ struct SectionHeader: View {
 
 struct ColorPaletteBar: View {
     @Binding var selection: PowderSwatch
+    @EnvironmentObject private var language: LanguageStore
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -113,7 +119,7 @@ struct ColorPaletteBar: View {
                             .shadow(color: swatch.color.opacity(0.35), radius: selection == swatch ? 6 : 0)
                     }
                     .buttonStyle(.plain)
-                    .accessibilityLabel(swatch.title)
+                    .accessibilityLabel(swatch.localizedTitle(language.language))
                     .accessibilityAddTraits(selection == swatch ? .isSelected : [])
                 }
             }

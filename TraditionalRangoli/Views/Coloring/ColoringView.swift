@@ -4,6 +4,7 @@ struct ColoringView: View {
     @ObservedObject var session: DrawingSession
     var onDone: () -> Void
     @Environment(\.horizontalSizeClass) private var sizeClass
+    @EnvironmentObject private var language: LanguageStore
 
     var body: some View {
         GeometryReader { geo in
@@ -61,14 +62,14 @@ struct ColoringView: View {
 
     private var header: some View {
         HStack {
-            Button("Skip") { onDone() }
+            Button(language.t("skip")) { onDone() }
                 .font(RangoliFont.headline(15))
                 .foregroundStyle(RangoliColor.muted)
             Spacer()
-            Text("Color & decorate")
+            Text(language.t("colorDecorate"))
                 .font(RangoliFont.title(20))
             Spacer()
-            Button("Done") { onDone() }
+            Button(language.t("done")) { onDone() }
                 .font(RangoliFont.headline(15))
                 .foregroundStyle(RangoliColor.primary)
         }
@@ -77,7 +78,7 @@ struct ColoringView: View {
     }
 
     private var caption: some View {
-        Text("Tap enclosed spaces to fill. Add rice powder, flowers or a diya.")
+        Text(language.t("colorCaption"))
             .font(RangoliFont.caption(13))
             .foregroundStyle(RangoliColor.muted)
             .multilineTextAlignment(.center)
@@ -86,11 +87,11 @@ struct ColoringView: View {
 
     private var decoRow: some View {
         HStack(spacing: 10) {
-            deco(.fill, "paintpalette.fill", "Fill")
-            deco(.rice, "circle.fill", "Rice")
-            deco(.flower, "camera.macro", "Flower")
-            deco(.diya, "flame.fill", "Diya")
-            deco(.dots, "circle.grid.2x2.fill", "Dots")
+            deco(.fill, "paintpalette.fill", language.t("fill"))
+            deco(.rice, "circle.fill", language.t("rice"))
+            deco(.flower, "camera.macro", language.t("flower"))
+            deco(.diya, "flame.fill", language.t("diya"))
+            deco(.dots, "circle.grid.2x2.fill", language.t("dots"))
         }
     }
 

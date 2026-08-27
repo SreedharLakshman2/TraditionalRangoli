@@ -3,6 +3,7 @@ import SwiftUI
 struct DrawingStudioView: View {
     @StateObject var session: DrawingSession
     @EnvironmentObject private var settings: SettingsStore
+    @EnvironmentObject private var language: LanguageStore
     @Environment(\.dismiss) private var dismiss
     @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var showMore = false
@@ -59,12 +60,12 @@ struct DrawingStudioView: View {
                 dismiss()
             }
         }
-        .confirmationDialog("Canvas", isPresented: $showMore, titleVisibility: .visible) {
-            Button("Toggle grid") { session.showGrid.toggle() }
-            Button("Toggle snap") { session.snapToDots.toggle() }
-            Button("Toggle guides") { session.showGuides.toggle() }
-            Button("Clear canvas", role: .destructive) { session.clear() }
-            Button("Cancel", role: .cancel) {}
+        .confirmationDialog(language.t("canvas"), isPresented: $showMore, titleVisibility: .visible) {
+            Button(language.t("toggleGrid")) { session.showGrid.toggle() }
+            Button(language.t("toggleSnap")) { session.snapToDots.toggle() }
+            Button(language.t("toggleGuides")) { session.showGuides.toggle() }
+            Button(language.t("clearCanvas"), role: .destructive) { session.clear() }
+            Button(language.t("cancel"), role: .cancel) {}
         }
     }
 
@@ -80,13 +81,13 @@ struct DrawingStudioView: View {
                     .background(RangoliColor.paper, in: Circle())
                     .goldFrame(cornerRadius: 20)
             }
-            .accessibilityLabel("Back")
+            .accessibilityLabel(language.t("back"))
             Spacer()
             VStack(spacing: 2) {
-                Text(session.title)
+                Text(session.displayTitle(language.language))
                     .font(RangoliFont.headline(17))
                     .foregroundStyle(RangoliColor.ink)
-                Text(session.symmetry == .none ? "Free line" : session.symmetry.title)
+                Text(session.symmetry == .none ? language.t("freeLine") : session.symmetry.localizedTitle(language.language))
                     .font(RangoliFont.caption(11))
                     .foregroundStyle(RangoliColor.muted)
             }
@@ -99,7 +100,7 @@ struct DrawingStudioView: View {
                     .background(RangoliColor.paper, in: Circle())
                     .goldFrame(cornerRadius: 20)
             }
-            .accessibilityLabel("More")
+            .accessibilityLabel(language.t("more"))
         }
         .padding(.horizontal, 16)
     }
@@ -113,7 +114,7 @@ struct DrawingStudioView: View {
             ColorPaletteBar(selection: $session.color)
                 .padding(.horizontal, 16)
                 .courtyardControls(640)
-            RangoliPrimaryButton(title: "Done", icon: "checkmark") {
+            RangoliPrimaryButton(title: language.t("done"), icon: "checkmark") {
                 coloring = true
             }
             .padding(.horizontal, 20)
@@ -137,7 +138,7 @@ struct DrawingStudioView: View {
                 .buttonStyle(PressScaleStyle())
             }
         }
-        .accessibilityLabel("Grid size")
+        .accessibilityLabel(language.t("gridSize"))
     }
 
     private var toolbar: some View {
@@ -148,14 +149,14 @@ struct DrawingStudioView: View {
                 tool(session.showGrid ? "circle.grid.3x3.fill" : "circle.grid.3x3", enabled: true) { session.showGrid.toggle() }
                 Menu {
                     ForEach(SymmetryMode.allCases) { mode in
-                        Button(mode.title) { session.symmetry = mode }
+                        Button(mode.localizedTitle(language.language)) { session.symmetry = mode }
                     }
                 } label: {
                     chip(session.symmetry.symbol, active: session.symmetry != .none)
                 }
                 Menu {
                     ForEach(BrushSize.allCases) { size in
-                        Button(size.title) { session.brush = size }
+                        Button(size.localizedTitle(language.language)) { session.brush = size }
                     }
                 } label: {
                     chip("paintbrush.pointed", active: true)
@@ -187,6 +188,6 @@ struct DrawingStudioView: View {
     private func finish() {
         Haptics.success(settings)
         let data = ArtworkSnapshot.png(session: session)
-        completed = session.artwork(title: session.title, thumbnail: data)
+        completed = session.artwork(title: session.displayTitle(language.language), thumbnail: data)
     }
 }

@@ -11,7 +11,7 @@ enum PatternCatalog {
             difficulty: .beginner,
             gridSize: 9,
             estimatedMinutes: 10,
-            description: "Create this traditional symmetrical lotus-inspired rangoli using a guided dot pattern.",
+            description: "A lotus at the threshold — place the pulli, then open the petals as a welcome.",
             tags: ["lotus", "dots", "beginner"],
             motif: .lotusDot,
             xpReward: 50
@@ -232,10 +232,9 @@ enum PatternCatalog {
         all.first { $0.id == id }
     }
 
-    static var daily: RangoliPattern {
-        let day = Calendar.current.ordinality(of: .day, in: .year, for: Date()) ?? 1
-        return all[day % all.count]
-    }
+    static var daily: RangoliPattern { today.pattern }
+
+    static var today: DailyLesson { KolamCalendar.lesson() }
 
     static var popular: [RangoliPattern] {
         Array(all.prefix(6))
@@ -246,14 +245,22 @@ enum PatternCatalog {
     }
 
     static func search(_ query: String) -> [RangoliPattern] {
-        let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        let raw = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmed = raw.lowercased()
         guard !trimmed.isEmpty else { return all }
         return all.filter {
             $0.title.lowercased().contains(trimmed)
+                || $0.tamilTitle.contains(raw)
+                || $0.culturalNote.lowercased().contains(trimmed)
                 || $0.tags.contains(where: { $0.contains(trimmed) })
                 || $0.family.title.lowercased().contains(trimmed)
+                || $0.family.tamilTitle.contains(raw)
                 || $0.theme.title.lowercased().contains(trimmed)
-                || $0.festivals.contains(where: { $0.title.lowercased().contains(trimmed) })
+                || $0.festivals.contains(where: {
+                    $0.title.lowercased().contains(trimmed)
+                        || $0.rawValue.contains(trimmed)
+                        || $0.tamilTitle.contains(raw)
+                })
         }
     }
 }

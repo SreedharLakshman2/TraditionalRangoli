@@ -53,7 +53,7 @@ struct ScreenshotRoot: View {
         Group {
             switch scene {
             case "learn":
-                GuidedLearningView(pattern: ScreenshotLaunch.lotus, screenshotStep: 2)
+                GuidedLearningView(pattern: PatternCatalog.pattern(id: "pulli") ?? ScreenshotLaunch.lotus, screenshotStep: 2)
             case "studio":
                 DrawingStudioView(session: ScreenshotLaunch.studioSession())
             case "color":

@@ -30,7 +30,7 @@ enum GeometryFactory {
         }
     }
 
-    static func steps(for pattern: RangoliPattern) -> [RangoliStep] {
+    static func steps(for pattern: RangoliPattern, language: AppLanguage = .english) -> [RangoliStep] {
         let all = strokes(for: pattern.motif)
         let n = max(all.count, 1)
         let groups = min(8, n)
@@ -38,29 +38,16 @@ enum GeometryFactory {
             let strokeIndex = min(n - 1, Int((Double(index) + 0.5) / Double(groups) * Double(n)))
             return RangoliStep(
                 id: "\(pattern.id)-step-\(index)",
-                instruction: instruction(for: pattern.motif, index: index, total: groups),
+                instruction: instruction(for: pattern.motif, index: index, total: groups, language: language),
                 strokeIndex: strokeIndex
             )
         }
     }
 
-    static func instruction(for motif: MotifKind, index: Int, total: Int) -> String {
-        let starters = [
-            "Begin at the heart of the kolam and rest the first curve on the nearest two dots.",
-            "Trace a calm powder line around the center, keeping the wrist light.",
-            "Mirror the petal on the opposite side so the rangoli stays balanced."
-        ]
-        let middles = [
-            "Sweep around the next pair of dots without lifting the powder line.",
-            "Let the curve kiss the dots rather than cutting through them.",
-            "Keep the spacing even — traditional kolam lives in rhythm.",
-            "Add the decorative loop, then return toward the center."
-        ]
-        let finishes = [
-            "Close the outer border and rest the last stroke on the starting point.",
-            "Soften the corners so the rangoli feels hand-drawn, not rigid.",
-            "Finish with a quiet center mark, like a bindu of rice powder."
-        ]
+    static func instruction(for motif: MotifKind, index: Int, total: Int, language: AppLanguage = .english) -> String {
+        let starters = ["stepStart1", "stepStart2", "stepStart3"].map { L10n.string($0, language) }
+        let middles = ["stepMid1", "stepMid2", "stepMid3", "stepMid4"].map { L10n.string($0, language) }
+        let finishes = ["stepEnd1", "stepEnd2", "stepEnd3"].map { L10n.string($0, language) }
         if index == 0 { return starters[abs(motif.rawValue.hashValue) % starters.count] }
         if index >= total - 1 { return finishes[index % finishes.count] }
         return middles[index % middles.count]

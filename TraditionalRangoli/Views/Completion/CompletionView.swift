@@ -9,6 +9,7 @@ struct CompletionView: View {
     @EnvironmentObject private var settings: SettingsStore
     @EnvironmentObject private var artworks: ArtworkStore
     @EnvironmentObject private var router: AppRouter
+    @EnvironmentObject private var language: LanguageStore
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var shownXP = 0
@@ -27,7 +28,7 @@ struct CompletionView: View {
                     .allowsHitTesting(false)
             }
             VStack(spacing: 16) {
-                Text("Beautiful Rangoli! 🪷")
+                Text(language.t("beautifulRangoli"))
                     .font(RangoliFont.display(30))
                     .foregroundStyle(RangoliColor.ink)
                     .multilineTextAlignment(.center)
@@ -43,16 +44,16 @@ struct CompletionView: View {
 
                 HStack(spacing: 10) {
                     stat("+\(shownXP) XP")
-                    stat("Pattern Completed")
+                    stat(language.t("patternCompleted"))
                     if let pattern {
-                        stat("\(pattern.stepCount) Steps")
+                        stat(language.format("stepsCount", pattern.stepCount))
                     }
                 }
                 if let pattern {
-                    MetaChip(text: "Difficulty: \(pattern.difficulty.title)")
+                    MetaChip(text: language.format("difficultyLabel", pattern.difficulty.localizedTitle(language.language)))
                 }
 
-                RangoliPrimaryButton(title: saved ? "Saved" : "Save Rangoli", icon: "square.and.arrow.down") {
+                RangoliPrimaryButton(title: saved ? language.t("saved") : language.t("saveRangoli"), icon: "square.and.arrow.down") {
                     artworks.save(artwork)
                     saved = true
                     Haptics.success(settings)
@@ -62,13 +63,13 @@ struct CompletionView: View {
 
                 if let url = shareURL {
                     ShareLink(item: url) {
-                        labelChip("Share", "square.and.arrow.up")
+                        labelChip(language.t("share"), "square.and.arrow.up")
                     }
                     .padding(.horizontal, 24)
                     .courtyardControls()
                 }
 
-                RangoliSecondaryButton(title: "Create Another", icon: "plus") {
+                RangoliSecondaryButton(title: language.t("createAnother"), icon: "plus") {
                     onClose()
                     router.tab = .create
                 }
@@ -81,7 +82,7 @@ struct CompletionView: View {
                     artworks.save(copy)
                     favorited = true
                 } label: {
-                    Text(favorited ? "In Favorites" : "Add to Favorites")
+                    Text(favorited ? language.t("inFavorites") : language.t("addToFavorites"))
                         .font(RangoliFont.headline(15))
                         .foregroundStyle(RangoliColor.primary)
                 }

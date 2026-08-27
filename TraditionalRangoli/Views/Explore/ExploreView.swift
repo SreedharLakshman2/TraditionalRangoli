@@ -1,13 +1,14 @@
 import SwiftUI
 
 struct ExploreView: View {
+    @EnvironmentObject private var language: LanguageStore
     @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var query = ""
 
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 22) {
-                SectionHeader(title: "Explore Rangoli", subtitle: "Traditional families, motifs and festivals")
+                SectionHeader(title: language.t("exploreTitle"), subtitle: language.t("exploreSubtitle"))
                 searchField
                 if query.isEmpty {
                     familySection
@@ -28,7 +29,7 @@ struct ExploreView: View {
         HStack(spacing: 10) {
             Image(systemName: "magnifyingglass")
                 .foregroundStyle(RangoliColor.muted)
-            TextField("Search patterns...", text: $query)
+            TextField(language.t("searchHint"), text: $query)
                 .font(RangoliFont.body(16))
                 .foregroundStyle(RangoliColor.ink)
         }
@@ -39,14 +40,14 @@ struct ExploreView: View {
     }
 
     private var familySection: some View {
-        exploreBlock(title: "TRADITIONAL") {
+        exploreBlock(title: language.t("sectionTraditional")) {
             ForEach(PatternFamily.allCases) { family in
                 let items = PatternCatalog.all.filter { $0.family == family }
                 if let first = items.first {
                     NavigationLink {
-                        PatternGridView(title: family.title, patterns: items)
+                        PatternGridView(title: family.localizedTitle(language.language), patterns: items)
                     } label: {
-                        CategoryCard(title: family.title, symbol: "⚬", motif: first.motif)
+                        CategoryCard(title: family.localizedTitle(language.language), symbol: "⚬", motif: first.motif)
                     }
                     .buttonStyle(PressScaleStyle())
                 }
@@ -55,14 +56,14 @@ struct ExploreView: View {
     }
 
     private var themeSection: some View {
-        exploreBlock(title: "THEMES") {
+        exploreBlock(title: language.t("sectionThemes")) {
             ForEach(MotifTheme.allCases) { theme in
                 let items = PatternCatalog.all.filter { $0.theme == theme }
                 if let first = items.first {
                     NavigationLink {
-                        PatternGridView(title: theme.title, patterns: items)
+                        PatternGridView(title: theme.localizedTitle(language.language), patterns: items)
                     } label: {
-                        CategoryCard(title: theme.title, symbol: theme.symbol, motif: first.motif)
+                        CategoryCard(title: theme.localizedTitle(language.language), symbol: theme.symbol, motif: first.motif)
                     }
                     .buttonStyle(PressScaleStyle())
                 }
@@ -71,14 +72,14 @@ struct ExploreView: View {
     }
 
     private var festivalSection: some View {
-        exploreBlock(title: "FESTIVALS") {
+        exploreBlock(title: language.t("sectionFestivals")) {
             ForEach(Festival.allCases) { festival in
                 let items = PatternCatalog.all.filter { $0.festivals.contains(festival) }
                 if let first = items.first {
                     NavigationLink {
-                        PatternGridView(title: festival.title, patterns: items)
+                        PatternGridView(title: festival.localizedTitle(language.language), patterns: items)
                     } label: {
-                        CategoryCard(title: festival.title, symbol: "🪔", motif: first.motif)
+                        CategoryCard(title: festival.localizedTitle(language.language), symbol: "🪔", motif: first.motif)
                     }
                     .buttonStyle(PressScaleStyle())
                 }

@@ -3,15 +3,18 @@ import SwiftUI
 struct ProfileView: View {
     @EnvironmentObject private var settings: SettingsStore
     @EnvironmentObject private var artworks: ArtworkStore
+    @EnvironmentObject private var language: LanguageStore
     @Environment(\.horizontalSizeClass) private var sizeClass
+    @State private var languageQuery = ""
 
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 20) {
-                SectionHeader(title: "My Rangoli Journey")
+                SectionHeader(title: language.t("profileJourney"))
                 stats
                 progressCard
                 achievements
+                languageCard
                 settingsCard
                 about
             }
@@ -24,10 +27,10 @@ struct ProfileView: View {
 
     private var stats: some View {
         HStack(spacing: 10) {
-            statTile("\(settings.patternsCompleted)", "Patterns")
-            statTile(settings.levelTitle.components(separatedBy: " ").last ?? "Beginner", "Level")
-            statTile("\(settings.xp)", "Total XP")
-            statTile(settings.favoriteStyle, "Style")
+            statTile("\(settings.patternsCompleted)", language.t("patternsStat"))
+            statTile(settings.localizedLevelTitle(language.language), language.t("levelStat"))
+            statTile("\(settings.xp)", language.t("xpStat"))
+            statTile(settings.localizedStyle(language.language), language.t("styleStat"))
         }
     }
 
@@ -41,6 +44,8 @@ struct ProfileView: View {
             Text(label)
                 .font(RangoliFont.label(10))
                 .foregroundStyle(RangoliColor.muted)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 14)
@@ -49,8 +54,8 @@ struct ProfileView: View {
 
     private var progressCard: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text(settings.levelTitle)
-                .font(RangoliFont.title(20))
+            Text(settings.localizedLevelTitle(language.language))
+                .font(.rangoliScript(20, language: language.language))
                 .foregroundStyle(RangoliColor.ink)
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
@@ -61,7 +66,7 @@ struct ProfileView: View {
                 }
             }
             .frame(height: 8)
-            Text("Keep a quiet daily practice. XP arrives when a rangoli is completed.")
+            Text(language.t("practiceNote"))
                 .font(RangoliFont.caption(12))
                 .foregroundStyle(RangoliColor.muted)
         }
@@ -71,13 +76,13 @@ struct ProfileView: View {
 
     private var achievements: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Achievements")
-                .font(RangoliFont.title(20))
+            Text(language.t("achievements"))
+                .font(.rangoliScript(20, language: language.language))
             LazyVGrid(columns: CourtyardLayout.achievementColumns(regular: sizeClass == .regular), spacing: 10) {
-                badge("🪷", "First Rangoli", unlocked: settings.patternsCompleted >= 1)
-                badge("🌸", "5 Patterns", unlocked: settings.patternsCompleted >= 5)
-                badge("🔥", "7 Day Streak", unlocked: settings.streak >= 7)
-                badge("🏆", "Master Creator", unlocked: settings.xp >= 500)
+                badge("🪷", language.t("badgeFirst"), unlocked: settings.patternsCompleted >= 1)
+                badge("🌸", language.t("badgeFive"), unlocked: settings.patternsCompleted >= 5)
+                badge("🔥", language.t("badgeStreak"), unlocked: settings.streak >= 7)
+                badge("🏆", language.t("badgeMaster"), unlocked: settings.xp >= 500)
             }
         }
     }
@@ -90,26 +95,40 @@ struct ProfileView: View {
             Text(title)
                 .font(RangoliFont.caption(12))
                 .foregroundStyle(unlocked ? RangoliColor.ink : RangoliColor.muted)
+                .multilineTextAlignment(.center)
+                .lineLimit(2)
+                .minimumScaleFactor(0.8)
         }
         .frame(maxWidth: .infinity)
         .padding(14)
         .paperCard(radius: RangoliRadius.md)
         .opacity(unlocked ? 1 : 0.7)
-        .accessibilityLabel("\(title)\(unlocked ? ", unlocked" : ", locked")")
+        .accessibilityLabel("\(title), \(language.t(unlocked ? "unlocked" : "locked"))")
+    }
+
+    private var languageCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(language.t("language"))
+                .font(.rangoliScript(20, language: language.language))
+                .foregroundStyle(RangoliColor.ink)
+            LanguagePickerList(query: $languageQuery)
+        }
+        .padding(16)
+        .paperCard()
     }
 
     private var settingsCard: some View {
         VStack(spacing: 0) {
-            Toggle("Sound", isOn: $settings.soundEnabled)
+            Toggle(language.t("sound"), isOn: $settings.soundEnabled)
                 .padding(.vertical, 12)
             Divider()
-            Toggle("Haptics", isOn: $settings.hapticsEnabled)
+            Toggle(language.t("haptics"), isOn: $settings.hapticsEnabled)
                 .padding(.vertical, 12)
             Divider()
-            Toggle("Show Guides", isOn: $settings.showGuides)
+            Toggle(language.t("showGuides"), isOn: $settings.showGuides)
                 .padding(.vertical, 12)
             Divider()
-            Picker("Default Grid", selection: $settings.defaultGrid) {
+            Picker(language.t("defaultGrid"), selection: $settings.defaultGrid) {
                 Text("7 × 7").tag(7)
                 Text("9 × 9").tag(9)
                 Text("11 × 11").tag(11)
@@ -118,10 +137,12 @@ struct ProfileView: View {
             .padding(.vertical, 8)
             Divider()
             HStack {
-                Text("Theme")
+                Text(language.t("theme"))
                 Spacer()
-                Text("Ivory courtyard")
+                Text(language.t("ivoryCourtyard"))
                     .foregroundStyle(RangoliColor.muted)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
             }
             .padding(.vertical, 12)
         }
@@ -134,27 +155,31 @@ struct ProfileView: View {
 
     private var about: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("About")
-                .font(RangoliFont.title(20))
+            Text(language.t("about"))
+                .font(.rangoliScript(20, language: language.language))
                 .foregroundStyle(RangoliColor.ink)
                 .frame(maxWidth: .infinity, alignment: .leading)
-            Text("\(RangoliColor.brand) is a courtyard companion for kolam and rangoli. Artwork stays on this device.")
+            Text(language.t("aboutApp"))
                 .font(RangoliFont.body(15))
                 .foregroundStyle(RangoliColor.muted)
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.top, 10)
-            aboutLink("Support", RangoliColor.supportURL)
+            Text(language.t("adsNote"))
+                .font(RangoliFont.caption(13))
+                .foregroundStyle(RangoliColor.muted)
+                .padding(.top, 8)
+            aboutLink(language.t("support"), RangoliColor.supportURL)
                 .padding(.top, 14)
             Divider()
-            aboutLink("Privacy Policy", RangoliColor.privacyURL)
+            aboutLink(language.t("privacy"), RangoliColor.privacyURL)
             Divider()
             Button {
                 Haptics.tap(settings)
                 ReviewPrompt.requestReview()
             } label: {
                 HStack {
-                    Text("Rate Traditional Rangoli")
+                    Text(language.t("rateApp"))
                         .font(RangoliFont.headline(16))
                         .foregroundStyle(RangoliColor.primary)
                     Spacer()
@@ -167,8 +192,7 @@ struct ProfileView: View {
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
-            .accessibilityLabel("Rate Traditional Rangoli")
-            .accessibilityHint("Opens Apple's rating card")
+            .accessibilityLabel(language.t("rateApp"))
             Text(RangoliColor.copyright)
                 .font(RangoliFont.caption(12))
                 .foregroundStyle(RangoliColor.muted)

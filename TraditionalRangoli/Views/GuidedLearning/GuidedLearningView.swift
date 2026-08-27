@@ -4,6 +4,7 @@ struct GuidedLearningView: View {
     let pattern: RangoliPattern
     @StateObject private var session: DrawingSession
     @EnvironmentObject private var settings: SettingsStore
+    @EnvironmentObject private var language: LanguageStore
     @Environment(\.dismiss) private var dismiss
     @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var stepIndex = 0
@@ -26,7 +27,7 @@ struct GuidedLearningView: View {
         _strokeMark = State(initialValue: seeded)
     }
 
-    private var steps: [RangoliStep] { pattern.steps }
+    private var steps: [RangoliStep] { pattern.steps(language: language.language) }
     private var total: Int { max(steps.count, 1) }
 
     var body: some View {
@@ -96,11 +97,11 @@ struct GuidedLearningView: View {
 
     private var stepCopy: some View {
         VStack(spacing: 10) {
-            Text("STEP \(stepIndex + 1) OF \(total)")
+            Text(language.format("stepOf", stepIndex + 1, total))
                 .font(RangoliFont.label(12))
                 .tracking(1.4)
                 .foregroundStyle(RangoliColor.gold)
-            Text(hint ?? (steps.indices.contains(stepIndex) ? steps[stepIndex].instruction : "Trace the faint stroke."))
+            Text(hint ?? (steps.indices.contains(stepIndex) ? steps[stepIndex].instruction : language.t("traceFaint")))
                 .font(RangoliFont.body(16))
                 .foregroundStyle(RangoliColor.ink)
                 .multilineTextAlignment(.center)
@@ -111,7 +112,7 @@ struct GuidedLearningView: View {
 
     private var navButtons: some View {
         HStack(spacing: 12) {
-            RangoliSecondaryButton(title: "Back") {
+            RangoliSecondaryButton(title: language.t("back")) {
                 if stepIndex == 0 {
                     dismiss()
                 } else {
@@ -119,7 +120,7 @@ struct GuidedLearningView: View {
                     hint = nil
                 }
             }
-            RangoliPrimaryButton(title: stepIndex == total - 1 ? "Finish" : "Next") {
+            RangoliPrimaryButton(title: stepIndex == total - 1 ? language.t("finish") : language.t("next")) {
                 advance()
             }
         }
@@ -135,10 +136,18 @@ struct GuidedLearningView: View {
                     .frame(width: 40, height: 40)
                     .background(RangoliColor.paper, in: Circle())
             }
-            .accessibilityLabel("Close")
+            .accessibilityLabel(language.t("close"))
             Spacer()
-            Text(pattern.title)
-                .font(RangoliFont.headline(17))
+            VStack(spacing: 2) {
+                Text(pattern.tamilTitle)
+                    .font(RangoliFont.tamil(16))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                Text(pattern.localizedTitle(language.language))
+                    .font(RangoliFont.caption(11))
+                    .foregroundStyle(RangoliColor.muted)
+                    .lineLimit(1)
+            }
             Spacer()
             Color.clear.frame(width: 40, height: 40)
         }
@@ -176,7 +185,7 @@ struct GuidedLearningView: View {
                 advance()
             }
         } else {
-            hint = "Almost — follow the faint stroke a little more closely."
+            hint = language.t("almost")
             Haptics.tap(settings)
         }
     }
@@ -185,7 +194,7 @@ struct GuidedLearningView: View {
         hint = nil
         if stepIndex >= total - 1 {
             let data = ArtworkSnapshot.png(session: session)
-            completed = session.artwork(title: pattern.title, thumbnail: data)
+            completed = session.artwork(title: pattern.localizedTitle(language.language), thumbnail: data)
         } else {
             stepIndex += 1
         }

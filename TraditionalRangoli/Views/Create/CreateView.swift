@@ -2,33 +2,34 @@ import SwiftUI
 
 struct CreateView: View {
     @EnvironmentObject private var router: AppRouter
+    @EnvironmentObject private var language: LanguageStore
     @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var showTemplates = false
 
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 18) {
-                SectionHeader(title: "Create", subtitle: "Three ways to lay powder on the floor")
+                SectionHeader(title: language.t("createTitle"), subtitle: language.t("createSubtitle"))
                 LazyVGrid(columns: CourtyardLayout.createColumns(regular: sizeClass == .regular), spacing: 16) {
                     createCard(
-                        title: "DOT RANGOLI",
-                        subtitle: "Create using a dot grid.",
+                        title: language.t("dotKolam"),
+                        subtitle: language.t("dotKolamSub"),
                         motif: .pulli,
                         tint: RangoliColor.primary
                     ) {
                         router.studio = StudioRoute(kind: .dots(nil))
                     }
                     createCard(
-                        title: "FREEHAND",
-                        subtitle: "Draw your own rangoli.",
+                        title: language.t("freehand"),
+                        subtitle: language.t("freehandSub"),
                         motif: .festivalFlower,
                         tint: RangoliColor.secondary
                     ) {
                         router.studio = StudioRoute(kind: .freehand)
                     }
                     createCard(
-                        title: "TEMPLATE",
-                        subtitle: "Start from a traditional pattern.",
+                        title: language.t("template"),
+                        subtitle: language.t("templateSub"),
                         motif: .lotusDot,
                         tint: RangoliColor.green
                     ) {
@@ -42,10 +43,10 @@ struct CreateView: View {
         .toolbar(.hidden, for: .navigationBar)
         .sheet(isPresented: $showTemplates) {
             NavigationStack {
-                PatternGridView(title: "Choose a template", patterns: PatternCatalog.all)
+                PatternGridView(title: language.t("chooseTemplate"), patterns: PatternCatalog.all)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
-                            Button("Close") { showTemplates = false }
+                            Button(language.t("close")) { showTemplates = false }
                         }
                     }
             }

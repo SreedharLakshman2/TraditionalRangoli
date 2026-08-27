@@ -14,9 +14,10 @@ Open **`TraditionalRangoli.xcodeproj`** and run the **TraditionalRangoli** schem
 
 Discover → Learn → Trace → Create → Decorate → Save → Share
 
-- 16 local patterns (lotus, pulli kolam, sikku, peacock, diya, mandala, Pongal, Onam pookalam, and more)
-- Real drawing canvas with smooth strokes, dot snapping, undo/redo, and 2/4/8-way symmetry
-- Guided step-by-step tracing with gentle path checks
+- 16 original pattern geometries with Tamil names and a note on why each kolam is drawn
+- Festival-aware Daily Lesson (Pongal, Deepavali, Onam, or everyday threshold kolam)
+- Guided step-by-step tracing on a pulli grid with a kind stroke check
+- Real drawing canvas with snap-to-dots, undo/redo, and 2/4/8-way symmetry
 - Coloring and courtyard decorations (rice powder, flowers, diyas)
 - On-device gallery — no account, no backend
 

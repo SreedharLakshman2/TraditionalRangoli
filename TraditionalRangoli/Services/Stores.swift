@@ -115,7 +115,7 @@ final class SettingsStore: ObservableObject {
             var ids = completedPatternIds
             ids.insert(id)
             completedPatternIds = ids
-            favoriteStyle = pattern?.theme.title ?? favoriteStyle
+            favoriteStyle = pattern?.theme.rawValue ?? favoriteStyle
         }
     }
 
@@ -136,7 +136,7 @@ final class SettingsStore: ObservableObject {
         patternsCompleted = 9
         completedPatternIds = ["lotus-dot", "peacock", "diya", "simple-flower", "mandala"]
         favoritePatternIds = ["lotus-dot", "peacock", "diya", "onam-pookalam"]
-        favoriteStyle = "Lotus"
+        favoriteStyle = MotifTheme.lotus.rawValue
         hapticsEnabled = false
         soundEnabled = false
         showGuides = true
@@ -189,7 +189,7 @@ final class ArtworkStore: ObservableObject {
     func duplicate(_ artwork: UserArtwork) {
         var copy = artwork
         copy.id = UUID()
-        copy.title = "\(artwork.title) copy"
+        copy.title = "\(artwork.title) \(L10n.string("copySuffix", LanguageStore.shared.language))"
         copy.createdDate = Date()
         copy.updatedDate = Date()
         copy.isFavorite = false

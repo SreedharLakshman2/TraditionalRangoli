@@ -13,8 +13,8 @@ Upload `01`–`06` from each folder, in that order. Skip 6.7" — Connect does n
 
 ## Copy on the posters
 
-1. **The courtyard is waiting** — Daily lotus, pulli, and festival floors.
-2. **Trace it stroke by stroke** — Kind guided lessons on a pulli grid.
+1. **Today's kolam is a lesson** — Tamil names, pulli count, Learn Step-by-Step.
+2. **Trace pulli stroke by stroke** — Tamil kolam lessons on a kind grid.
 3. **One line becomes eight** — Symmetry that mirrors a powder stroke.
 4. **Dot, freehand, template** — Three ways to lay rice powder.
 5. **Rice, flowers, and diyas** — Color the courtyard you just drew.

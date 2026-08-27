@@ -64,6 +64,11 @@ enum RangoliFont {
     static func label(_ size: CGFloat = 11) -> Font {
         .system(size: size, weight: .semibold, design: .rounded)
     }
+
+    /// Tamil script — avoid New York serif, which is missing Tamil glyphs.
+    static func tamil(_ size: CGFloat = 22) -> Font {
+        .system(size: size, weight: .semibold, design: .rounded)
+    }
 }
 
 enum RangoliRadius {
