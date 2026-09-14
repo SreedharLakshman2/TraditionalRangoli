@@ -44,10 +44,12 @@ struct PatternDetailView: View {
                     router.studio = StudioRoute(kind: .guided(pattern))
                 }
                 .courtyardControls()
-                RangoliSecondaryButton(title: language.t("drawFreely"), icon: "pencil.tip") {
-                    router.studio = StudioRoute(kind: .dots(pattern))
+                if settings.studioUnlocked {
+                    RangoliSecondaryButton(title: language.t("drawFreely"), icon: "pencil.tip") {
+                        router.studio = StudioRoute(kind: .dots(pattern))
+                    }
+                    .courtyardControls()
                 }
-                .courtyardControls()
                 Button {
                     withAnimation(.spring(response: 0.32, dampingFraction: 0.55)) {
                         settings.toggleFavorite(patternId: pattern.id)

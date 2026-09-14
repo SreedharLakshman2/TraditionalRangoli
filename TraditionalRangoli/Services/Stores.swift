@@ -18,6 +18,9 @@ final class SettingsStore: ObservableObject {
     @Published var colorTheme: CourtyardColorTheme {
         didSet { CourtyardColorTheme.setCurrent(colorTheme) }
     }
+    @Published var favoritePatternIds: Set<String> {
+        didSet { defaults.set(Array(favoritePatternIds), forKey: Keys.favorites) }
+    }
 
     private let defaults = UserDefaults.standard
 
@@ -42,6 +45,7 @@ final class SettingsStore: ObservableObject {
         hapticsEnabled = defaults.object(forKey: Keys.haptics) as? Bool ?? true
         showGuides = defaults.object(forKey: Keys.guides) as? Bool ?? true
         defaultGrid = defaults.object(forKey: Keys.grid) as? Int ?? 9
+        favoritePatternIds = Set(defaults.stringArray(forKey: Keys.favorites) ?? [])
         let themeRaw = defaults.string(forKey: Keys.colorTheme) ?? CourtyardColorTheme.ivoryCourtyard.rawValue
         colorTheme = CourtyardColorTheme(rawValue: themeRaw) ?? .ivoryCourtyard
         CourtyardColorTheme.cached = colorTheme
@@ -62,14 +66,21 @@ final class SettingsStore: ObservableObject {
         set { defaults.set(newValue, forKey: Keys.completed); objectWillChange.send() }
     }
 
+    var studioUnlocked: Bool {
+        if ScreenshotLaunch.isActive {
+            switch ScreenshotLaunch.scene {
+            case "studio", "color", "create", "saved":
+                return true
+            default:
+                return false
+            }
+        }
+        return patternsCompleted >= 1
+    }
+
     var completedPatternIds: Set<String> {
         get { Set(defaults.stringArray(forKey: Keys.patternIds) ?? []) }
         set { defaults.set(Array(newValue), forKey: Keys.patternIds); objectWillChange.send() }
-    }
-
-    var favoritePatternIds: Set<String> {
-        get { Set(defaults.stringArray(forKey: Keys.favorites) ?? []) }
-        set { defaults.set(Array(newValue), forKey: Keys.favorites); objectWillChange.send() }
     }
 
     var favoriteStyle: String {
@@ -140,7 +151,16 @@ final class SettingsStore: ObservableObject {
         hasSeenOnboarding = true
         xp = 340
         streak = 12
-        patternsCompleted = 9
+        if ScreenshotLaunch.isActive {
+            switch ScreenshotLaunch.scene {
+            case "studio", "color", "create", "saved":
+                patternsCompleted = 9
+            default:
+                patternsCompleted = 0
+            }
+        } else {
+            patternsCompleted = 9
+        }
         completedPatternIds = ["lotus-dot", "peacock", "diya", "simple-flower", "mandala"]
         favoritePatternIds = ["lotus-dot", "peacock", "diya", "onam-pookalam"]
         favoriteStyle = MotifTheme.lotus.rawValue

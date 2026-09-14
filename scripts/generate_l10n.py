@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
-"""Generate TraditionalRangoli/App/L10n.swift — 21 languages, Count Mantras style."""
+"""Generate TraditionalRangoli/App/L10n.swift + L10nTable.json — 21 languages."""
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1] / "TraditionalRangoli" / "App" / "L10n.swift"
+APP = Path(__file__).resolve().parents[1] / "TraditionalRangoli" / "App"
+ROOT = APP / "L10n.swift"
+JSON_ROOT = APP / "L10nTable.json"
 
 LANGS = [
     "english", "hindi", "tamil", "telugu", "kannada", "malayalam", "marathi",
@@ -13,8 +16,8 @@ LANGS = [
 ]
 
 EN = {
-    "appName": "Traditional Rangoli",
-    "tagline": "Courtyard art, drawn by hand",
+    "appName": "Tamil Kolam Lessons",
+    "tagline": "Tamil pulli and sikku, taught",
     "tabHome": "Home",
     "tabExplore": "Explore",
     "tabCreate": "Create",
@@ -37,18 +40,18 @@ EN = {
     "settings": "Settings",
     "support": "Support",
     "privacy": "Privacy Policy",
-    "rateApp": "Rate Traditional Rangoli",
+    "rateApp": "Rate Tamil Kolam Lessons",
     "onboard1Title": "Tamil kolam, taught",
     "onboard1Body": "Pulli and sikku are Tamil courtyard writing — rice flour on clay, not a coloring book.",
     "onboard2Title": "Stroke by stroke",
     "onboard2Body": "Each lesson places the dots, then asks you to trace. The check is kind, not a quiz.",
-    "onboard3Title": "Then draw your own",
-    "onboard3Body": "After the line is learned, symmetry, freehand, flowers and diyas finish the floor.",
+    "onboard3Title": "Then keep the line",
+    "onboard3Body": "After you finish today's lesson, the studio opens. Until then, Home is only the course.",
     "beginLesson": "Begin today's lesson",
     "goodMorning": "Good Morning",
     "goodAfternoon": "Good Afternoon",
     "goodEvening": "Good Evening",
-    "homeSubtitle": "Today's kolam is a lesson, not a blank canvas.",
+    "homeSubtitle": "Trace today's kolam. The studio opens after one lesson.",
     "learnStepByStep": "Learn Step-by-Step",
     "drawFreely": "Draw freely",
     "exploreCollections": "Explore Collections",
@@ -110,9 +113,9 @@ EN = {
     "savedTitle": "My Rangolis",
     "myCreations": "My Creations",
     "favorites": "Favorites",
-    "emptyGalleryTitle": "Your rangoli gallery is waiting.",
-    "emptyGallerySub": "Create your first traditional rangoli.",
-    "createRangoli": "Create Rangoli",
+    "emptyGalleryTitle": "Your lesson gallery is waiting.",
+    "emptyGallerySub": "Finish today's lesson, then draw.",
+    "createRangoli": "Start today's lesson",
     "emptyFavTitle": "Save patterns you love.",
     "emptyFavSub": "Favorite a courtyard piece to keep it close.",
     "explorePatterns": "Explore Patterns",
@@ -145,8 +148,13 @@ EN = {
     "themeDeepavaliGold": "Deepavali gold",
     "themeTerracottaClay": "Terracotta clay",
     "about": "About",
-    "aboutApp": "Traditional Rangoli is a courtyard teacher for Tamil kolam and Indian rangoli. Artwork stays on this device.",
-    "adsNote": "Ads keep Traditional Rangoli free.",
+    "aboutApp": "Tamil Kolam Lessons is a courtyard teacher for pulli and sikku. Home is today's lesson. Artwork stays on this device.",
+    "adsNote": "Ads keep Tamil Kolam Lessons free.",
+    "nextLessons": "Coming lessons",
+    "studioLockedTitle": "Studio opens after a lesson",
+    "studioLockedSub": "Finish Learn Step-by-Step once. Then you can draw freely.",
+    "lessonNumber": "Lesson %d",
+    "courseProgress": "%d lessons finished",
     "beautifulRangoli": "Beautiful Rangoli! 🪷",
     "patternCompleted": "Pattern Completed",
     "difficultyLabel": "Difficulty: %@",
@@ -976,6 +984,7 @@ T["sanskrit"]["continue"] = T["sanskrit"].pop("continue_")
 import sys as _sys
 _sys.path.insert(0, str(Path(__file__).resolve().parent))
 from l10n_full import FULL, MUST_TRANSLATE, ALLOW_SAME_LATIN, LATIN_LANGS  # noqa: E402
+from l10n_course import COURSE  # noqa: E402
 
 SCREEN_KEYS = [
     "exploreCollections", "kolamLessons", "kolamLessonsSub",
@@ -999,38 +1008,46 @@ STRICT_LANGS = {
 
 for _lang, _rows in FULL.items():
     T.setdefault(_lang, {}).update(_rows)
+for _lang, _rows in COURSE.items():
+    T.setdefault(_lang, {}).update(_rows)
 
 
-def esc(s: str) -> str:
-    return s.replace("\\", "\\\\").replace('"', '\\"')
-
-
-def emit() -> str:
-    out = [
-        "import Foundation",
-        "",
-        "enum L10n {",
-        "    static func string(_ key: String, _ language: AppLanguage) -> String {",
-        "        table[language]?[key] ?? table[.english]?[key] ?? key",
-        "    }",
-        "",
-        "    private static let table: [AppLanguage: [String: String]] = [",
-    ]
+def table() -> dict[str, dict[str, str]]:
+    out: dict[str, dict[str, str]] = {}
     for lang in LANGS:
         merged = dict(EN)
         if lang != "english":
             merged.update(T.get(lang, {}))
-        out.append(f"        .{lang}: [")
-        for key in merged:
-            out.append(f'            "{key}": "{esc(merged[key])}",')
-        out.append("        ],")
-    out.append("    ]")
-    out.append("}")
-    out.append("")
-    return "\n".join(out)
+        out[lang] = merged
+    return out
 
 
-ROOT.write_text(emit(), encoding="utf-8")
+def emit_swift() -> str:
+    return """import Foundation
+
+enum L10n {
+    static func string(_ key: String, _ language: AppLanguage) -> String {
+        table[language.rawValue]?[key] ?? table["english"]?[key] ?? key
+    }
+
+    private static let table: [String: [String: String]] = load()
+
+    private static func load() -> [String: [String: String]] {
+        let bundles = [Bundle.main, Bundle(for: L10nBundleAnchor.self)]
+        for bundle in bundles {
+            if let url = bundle.url(forResource: "L10nTable", withExtension: "json"),
+               let data = try? Data(contentsOf: url),
+               let decoded = try? JSONDecoder().decode([String: [String: String]].self, from: data) {
+                return decoded
+            }
+        }
+        return [:]
+    }
+}
+
+private final class L10nBundleAnchor: NSObject {}
+"""
+
 
 def _check() -> None:
     leftover: list[str] = []
@@ -1053,5 +1070,9 @@ def _check() -> None:
 
 
 _check()
+payload = table()
+JSON_ROOT.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+ROOT.write_text(emit_swift(), encoding="utf-8")
 print("wrote", ROOT, "bytes", ROOT.stat().st_size)
+print("wrote", JSON_ROOT, "bytes", JSON_ROOT.stat().st_size)
 print("l10n check ok")

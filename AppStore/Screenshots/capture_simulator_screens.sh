@@ -12,8 +12,8 @@ DERIVED="$ROOT/.store-derived"
 SCENES=(
   "home:01-home.png:3.4"
   "learn:02-learn.png:2.2"
-  "studio:03-studio.png:2.0"
-  "create:04-create.png:3.2"
+  "explore:03-explore.png:2.2"
+  "detail:04-detail.png:2.4"
   "color:05-color.png:2.0"
   "saved:06-saved.png:2.6"
 )

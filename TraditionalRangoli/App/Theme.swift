@@ -172,7 +172,7 @@ enum RangoliColor {
     static var onAccent: Color { palette.onAccent }
     static var cardWash: Color { palette.cardWash }
 
-    static let brand = "Traditional Rangoli"
+    static let brand = "Tamil Kolam Lessons"
     static let company = "Sai Laksha Technologies"
     static let studio = "Sreeo Studio"
     static let developer = "Sreedhar Lakshmanan"

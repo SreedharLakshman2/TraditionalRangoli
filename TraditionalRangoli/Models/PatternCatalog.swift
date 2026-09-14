@@ -240,6 +240,18 @@ enum PatternCatalog {
         Array(all.prefix(6))
     }
 
+    static func lessonNumber(for pattern: RangoliPattern) -> Int {
+        (all.firstIndex(where: { $0.id == pattern.id }) ?? 0) + 1
+    }
+
+    static func upcoming(after id: String, limit: Int = 4) -> [RangoliPattern] {
+        guard let idx = all.firstIndex(where: { $0.id == id }) else {
+            return Array(all.prefix(limit))
+        }
+        let rotated = Array(all[(idx + 1)...]) + Array(all[..<idx])
+        return Array(rotated.prefix(limit))
+    }
+
     static func matching(_ collection: BrowseCollection) -> [RangoliPattern] {
         all.filter(collection.matches)
     }

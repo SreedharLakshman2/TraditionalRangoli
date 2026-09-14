@@ -1,8 +1,8 @@
-# Traditional Rangoli
+# Tamil Kolam Lessons
 
-A premium iPhone and iPad app for learning, tracing, and creating traditional Indian rangoli and Tamil kolam. Built with SwiftUI.
+A Tamil kolam course for iPhone and iPad. First launch is today's lesson. The studio opens after you finish one guided lesson. Built with SwiftUI.
 
-Open **`TraditionalRangoli.xcodeproj`** and run the **TraditionalRangoli** scheme.
+Open **`TraditionalRangoli.xcodeproj`** and run the **TraditionalRangoli** scheme. Display name: **Tamil Kolam Lessons**.
 
 ## Requirements
 
@@ -12,13 +12,14 @@ Open **`TraditionalRangoli.xcodeproj`** and run the **TraditionalRangoli** schem
 
 ## Experience
 
-Discover → Learn → Trace → Create → Decorate → Save → Share
+Today's lesson → Learn Step-by-Step → studio unlocks → Decorate → Save
 
-- 16 original pattern geometries with Tamil names and a note on why each kolam is drawn
+- First launch hides Create and freehand until one lesson is finished
+- Home is a numbered course, not a pattern gallery
 - Festival-aware Daily Lesson (Pongal, Deepavali, Onam, or everyday threshold kolam)
+- 16 original pattern geometries with Tamil names and a note on why each kolam is drawn
 - Guided step-by-step tracing on a pulli grid with a kind stroke check
-- Real drawing canvas with snap-to-dots, undo/redo, and 2/4/8-way symmetry
-- Coloring and courtyard decorations (rice powder, flowers, diyas)
+- After unlock: snap-to-dots, undo/redo, symmetry, rice powder, flowers, diyas
 - On-device gallery — no account, no backend
 
 ## Ads
@@ -27,7 +28,7 @@ Debug builds use Google sample banner and interstitial units so ads always fill.
 
 Release builds use the Traditional Rangoli AdMob app ID in `Info.plist` (`GADApplicationIdentifier`). Banner and interstitial units for bundle `com.sreedhar.TraditionalRangoli` are in `TraditionalRangoli/Services/AdConfig.swift`.
 
-A banner sits under the tab bar on Home, Explore, Create, Saved, and Profile. An interstitial can appear after you complete a rangoli, with a short cooldown.
+A banner sits under the tab bar. An interstitial can appear after you complete a lesson, with a short cooldown. Create is hidden until the first lesson is finished.
 
 ## App Store
 

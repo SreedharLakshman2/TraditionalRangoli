@@ -2,11 +2,46 @@ import SwiftUI
 
 struct CreateView: View {
     @EnvironmentObject private var router: AppRouter
+    @EnvironmentObject private var settings: SettingsStore
     @EnvironmentObject private var language: LanguageStore
     @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var showTemplates = false
 
     var body: some View {
+        Group {
+            if settings.studioUnlocked {
+                unlockedBody
+            } else {
+                lockedBody
+            }
+        }
+        .toolbar(.hidden, for: .navigationBar)
+    }
+
+    private var lockedBody: some View {
+        VStack(spacing: 18) {
+            Spacer()
+            VStack(alignment: .leading, spacing: 12) {
+                Text(language.t("studioLockedTitle"))
+                    .font(.rangoliScript(26, language: language.language))
+                    .foregroundStyle(RangoliColor.ink)
+                Text(language.t("studioLockedSub"))
+                    .font(RangoliFont.body(16))
+                    .foregroundStyle(RangoliColor.muted)
+                    .fixedSize(horizontal: false, vertical: true)
+                RangoliPrimaryButton(title: language.t("beginLesson"), icon: "hand.draw") {
+                    router.tab = .home
+                }
+                .courtyardControls()
+            }
+            .padding(20)
+            .paperCard(radius: RangoliRadius.xl)
+            .padding(.horizontal, 20)
+            Spacer()
+        }
+    }
+
+    private var unlockedBody: some View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 18) {
                 SectionHeader(title: language.t("createTitle"), subtitle: language.t("createSubtitle"))
@@ -40,7 +75,6 @@ struct CreateView: View {
             .padding(20)
             .courtyardColumn(sizeClass == .regular ? 1100 : 780)
         }
-        .toolbar(.hidden, for: .navigationBar)
         .sheet(isPresented: $showTemplates) {
             NavigationStack {
                 PatternGridView(title: language.t("chooseTemplate"), patterns: PatternCatalog.all)

@@ -4,6 +4,7 @@ import UIKit
 struct SavedView: View {
     @EnvironmentObject private var artworks: ArtworkStore
     @EnvironmentObject private var router: AppRouter
+    @EnvironmentObject private var settings: SettingsStore
     @EnvironmentObject private var language: LanguageStore
     @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var segment = 0
@@ -20,47 +21,103 @@ struct SavedView: View {
             .pickerStyle(.segmented)
             .padding(.horizontal, 20)
 
-            let items = segment == 0 ? artworks.creations : artworks.favorites
-            if items.isEmpty {
-                Spacer()
-                if segment == 0 {
-                    EmptyGallery(
-                        title: language.t("emptyGalleryTitle"),
-                        subtitle: language.t("emptyGallerySub"),
-                        button: language.t("createRangoli")
-                    ) {
-                        router.tab = .create
-                    }
-                } else {
-                    EmptyGallery(
-                        title: language.t("emptyFavTitle"),
-                        subtitle: language.t("emptyFavSub"),
-                        button: language.t("explorePatterns")
-                    ) {
-                        router.tab = .explore
-                    }
-                }
-                Spacer()
+            if segment == 0 {
+                creationsBody
             } else {
-                ScrollView {
-                    LazyVGrid(columns: CourtyardLayout.galleryColumns(regular: sizeClass == .regular), spacing: 12) {
-                        ForEach(items) { art in
-                            NavigationLink {
-                                ArtworkDetailView(artwork: art)
-                            } label: {
-                                SavedCard(artwork: art)
-                            }
-                            .buttonStyle(PressScaleStyle(amount: 0.98))
-                        }
-                    }
-                    .padding(20)
-                    .padding(.bottom, 12)
-                    .courtyardColumn(1100)
-                }
+                favoritesBody
             }
         }
         .courtyardColumn(1100)
         .toolbar(.hidden, for: .navigationBar)
+    }
+
+    private var favoritePatterns: [RangoliPattern] {
+        PatternCatalog.all.filter { settings.favoritePatternIds.contains($0.id) }
+    }
+
+    @ViewBuilder
+    private var creationsBody: some View {
+        let items = artworks.creations
+        if items.isEmpty {
+            Spacer()
+            EmptyGallery(
+                title: language.t("emptyGalleryTitle"),
+                subtitle: language.t("emptyGallerySub"),
+                button: language.t("createRangoli")
+            ) {
+                router.tab = settings.studioUnlocked ? .create : .home
+            }
+            Spacer()
+        } else {
+            artworkGrid(items)
+        }
+    }
+
+    @ViewBuilder
+    private var favoritesBody: some View {
+        let favoriteArt = artworks.favorites
+        let patterns = favoritePatterns
+        if favoriteArt.isEmpty && patterns.isEmpty {
+            Spacer()
+            EmptyGallery(
+                title: language.t("emptyFavTitle"),
+                subtitle: language.t("emptyFavSub"),
+                button: language.t("explorePatterns")
+            ) {
+                router.tab = .explore
+            }
+            Spacer()
+        } else {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    if !favoriteArt.isEmpty {
+                        LazyVGrid(columns: CourtyardLayout.galleryColumns(regular: sizeClass == .regular), spacing: 12) {
+                            ForEach(favoriteArt) { art in
+                                NavigationLink {
+                                    ArtworkDetailView(artwork: art)
+                                } label: {
+                                    SavedCard(artwork: art)
+                                }
+                                .buttonStyle(PressScaleStyle(amount: 0.98))
+                            }
+                        }
+                    }
+                    if !patterns.isEmpty {
+                        LazyVGrid(columns: CourtyardLayout.patternColumns(regular: sizeClass == .regular), spacing: 16) {
+                            ForEach(patterns) { pattern in
+                                NavigationLink {
+                                    PatternDetailView(pattern: pattern)
+                                } label: {
+                                    RangoliCard(pattern: pattern, large: true)
+                                }
+                                .buttonStyle(PressScaleStyle(amount: 0.985))
+                            }
+                        }
+                    }
+                }
+                .padding(20)
+                .padding(.bottom, 12)
+                .courtyardColumn(1100)
+            }
+        }
+    }
+
+    private func artworkGrid(_ items: [UserArtwork]) -> some View {
+        ScrollView {
+            LazyVGrid(columns: CourtyardLayout.galleryColumns(regular: sizeClass == .regular), spacing: 12) {
+                ForEach(items) { art in
+                    NavigationLink {
+                        ArtworkDetailView(artwork: art)
+                    } label: {
+                        SavedCard(artwork: art)
+                    }
+                    .buttonStyle(PressScaleStyle(amount: 0.98))
+                }
+            }
+            .padding(20)
+            .padding(.bottom, 12)
+            .courtyardColumn(1100)
+        }
     }
 }
 

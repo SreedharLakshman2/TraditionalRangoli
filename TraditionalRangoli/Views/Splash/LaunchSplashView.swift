@@ -59,7 +59,7 @@ struct LaunchSplashView: View {
                 onFinished()
             }
         }
-        .accessibilityLabel("Traditional Rangoli. Sreeo Studio. \(RangoliColor.copyright)")
+        .accessibilityLabel("\(language.t("appName")). Sreeo Studio. \(RangoliColor.copyright)")
     }
 
     private var studioFooter: some View {

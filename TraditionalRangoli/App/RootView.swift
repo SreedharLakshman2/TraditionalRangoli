@@ -107,8 +107,16 @@ struct RootView: View {
                 }
             }
         }
+        .onAppear { bounceLockedCreateTab() }
+        .onChange(of: router.tab) { _, _ in bounceLockedCreateTab() }
         .fullScreenCover(item: $router.studio) { route in
             studio(for: route)
+        }
+    }
+
+    private func bounceLockedCreateTab() {
+        if router.tab == .create && !settings.studioUnlocked {
+            router.tab = .home
         }
     }
 

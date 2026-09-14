@@ -58,6 +58,10 @@ struct ScreenshotRoot: View {
                 DrawingStudioView(session: ScreenshotLaunch.studioSession())
             case "color":
                 ColoringView(session: ScreenshotLaunch.studioSession(decorate: true), onDone: {})
+            case "detail":
+                NavigationStack {
+                    PatternDetailView(pattern: PatternCatalog.pattern(id: "pulli") ?? ScreenshotLaunch.lotus)
+                }
             default:
                 RootView()
             }

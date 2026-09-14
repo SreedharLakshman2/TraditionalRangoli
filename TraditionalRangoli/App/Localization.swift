@@ -118,7 +118,8 @@ enum LocalizationChrome {
         "headlineOnam", "myCreations", "favorites",
         "emptyGalleryTitle", "emptyGallerySub", "createRangoli",
         "emptyFavTitle", "emptyFavSub", "explorePatterns",
-        "pattern.onam-pookalam.title", "pattern.onam-pookalam.note"
+        "pattern.onam-pookalam.title", "pattern.onam-pookalam.note",
+        "nextLessons", "studioLockedTitle", "homeSubtitle", "appName"
     ]
 
     static func differsFromEnglish(_ key: String, _ language: AppLanguage) -> Bool {

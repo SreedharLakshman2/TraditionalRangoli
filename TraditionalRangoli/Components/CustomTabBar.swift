@@ -29,11 +29,16 @@ enum AppTab: String, CaseIterable, Identifiable {
 struct CustomTabBar: View {
     @Binding var selection: AppTab
     @EnvironmentObject private var language: LanguageStore
+    @EnvironmentObject private var settings: SettingsStore
     @Namespace private var ns
+
+    private var tabs: [AppTab] {
+        AppTab.allCases.filter { $0 != .create || settings.studioUnlocked }
+    }
 
     var body: some View {
         HStack(spacing: 0) {
-            ForEach(AppTab.allCases) { tab in
+            ForEach(tabs) { tab in
                 Button {
                     withAnimation(.spring(response: 0.38, dampingFraction: 0.78)) {
                         selection = tab

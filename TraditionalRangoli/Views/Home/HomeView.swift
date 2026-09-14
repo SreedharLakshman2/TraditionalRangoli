@@ -12,8 +12,7 @@ struct HomeView: View {
             VStack(alignment: .leading, spacing: 26) {
                 header
                 dailyLessonCard
-                collections
-                popular
+                comingLessons
                 Spacer(minLength: 20)
             }
             .padding(.horizontal, 20)
@@ -35,6 +34,9 @@ struct HomeView: View {
                 Text(language.t("homeSubtitle"))
                     .font(RangoliFont.body(16))
                     .foregroundStyle(RangoliColor.muted)
+                Text(language.format("courseProgress", settings.patternsCompleted))
+                    .font(RangoliFont.label(12))
+                    .foregroundStyle(RangoliColor.gold)
             }
             Spacer()
             VStack(spacing: 4) {
@@ -103,10 +105,6 @@ struct HomeView: View {
                 router.studio = StudioRoute(kind: .guided(pattern))
             }
             .courtyardControls()
-            RangoliSecondaryButton(title: language.t("drawFreely"), icon: "pencil.tip") {
-                router.studio = StudioRoute(kind: .dots(pattern))
-            }
-            .courtyardControls()
         }
         .padding(18)
         .background(
@@ -119,53 +117,37 @@ struct HomeView: View {
         .accessibilityLabel("\(lesson.kicker(language.language)). \(pattern.localizedTitle(language.language)). \(lesson.headline(language.language))")
     }
 
-    private var collections: some View {
+    private var comingLessons: some View {
         VStack(alignment: .leading, spacing: 14) {
-            SectionHeader(title: language.t("exploreCollections"))
-            if sizeClass == .regular {
-                LazyVGrid(columns: CourtyardLayout.categoryColumns(regular: true), spacing: 12) {
-                    collectionLinks
-                }
-                .environment(\.courtyardExpandedCards, true)
-            } else {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 12) {
-                        collectionLinks
+            SectionHeader(title: language.t("nextLessons"))
+            ForEach(PatternCatalog.upcoming(after: lesson.pattern.id)) { pattern in
+                NavigationLink {
+                    PatternDetailView(pattern: pattern)
+                } label: {
+                    HStack(spacing: 14) {
+                        RangoliPreview(motif: pattern.motif)
+                            .frame(width: 64, height: 64)
+                            .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(language.format("lessonNumber", PatternCatalog.lessonNumber(for: pattern)))
+                                .font(RangoliFont.label(11))
+                                .tracking(0.8)
+                                .foregroundStyle(RangoliColor.gold)
+                            Text(pattern.localizedTitle(language.language))
+                                .font(RangoliFont.headline(16))
+                                .foregroundStyle(RangoliColor.ink)
+                                .lineLimit(2)
+                                .minimumScaleFactor(0.85)
+                        }
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundStyle(RangoliColor.muted)
                     }
-                    .padding(.vertical, 4)
+                    .padding(12)
+                    .paperCard(radius: 18)
                 }
-            }
-        }
-    }
-
-    @ViewBuilder
-    private var collectionLinks: some View {
-        ForEach(BrowseCollection.allCases) { collection in
-            NavigationLink {
-                CollectionListView(collection: collection)
-            } label: {
-                CategoryCard(
-                    title: collection.localizedTitle(language.language),
-                    symbol: collection.symbol,
-                    motif: PatternCatalog.matching(collection).first?.motif ?? .lotusDot
-                )
-            }
-            .buttonStyle(PressScaleStyle())
-        }
-    }
-
-    private var popular: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            SectionHeader(title: language.t("kolamLessons"), subtitle: language.t("kolamLessonsSub"))
-            LazyVGrid(columns: CourtyardLayout.patternColumns(regular: sizeClass == .regular), spacing: 16) {
-                ForEach(PatternCatalog.popular) { pattern in
-                    NavigationLink {
-                        PatternDetailView(pattern: pattern)
-                    } label: {
-                        RangoliCard(pattern: pattern, large: true)
-                    }
-                    .buttonStyle(PressScaleStyle(amount: 0.985))
-                }
+                .buttonStyle(PressScaleStyle())
             }
         }
     }
