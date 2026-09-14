@@ -12,6 +12,7 @@ struct TraditionalRangoliApp: App {
         let settings = SettingsStore()
         let artworks = ArtworkStore()
         let router = AppRouter()
+        L10n.prepare()
         if ScreenshotLaunch.isActive {
             settings.seedForScreenshots()
             artworks.seedScreenshots()

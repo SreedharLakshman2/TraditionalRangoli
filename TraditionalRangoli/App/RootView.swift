@@ -36,17 +36,18 @@ struct TraditionalRangoliAppRoot: View {
 
     var body: some View {
         ZStack {
-            RootView()
+            RangoliColor.ivory.ignoresSafeArea()
+            if !showSplash {
+                RootView()
+            }
             if showSplash {
                 LaunchSplashView {
-                    withAnimation(.easeOut(duration: 0.28)) {
+                    withAnimation(.easeOut(duration: 0.16)) {
                         showSplash = false
                     }
+                    ads.bootstrap()
                     ads.requestTrackingIfNeeded()
                     ReviewPrompt.askIfAppropriate(delay: 8)
-                }
-                .onAppear {
-                    ads.bootstrap()
                 }
                 .transition(.opacity)
                 .zIndex(1)

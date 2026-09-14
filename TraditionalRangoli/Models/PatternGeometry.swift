@@ -9,7 +9,16 @@ struct MotifStroke: Identifiable, Hashable {
 }
 
 enum GeometryFactory {
+    private static var strokeCache: [MotifKind: [MotifStroke]] = [:]
+
     static func strokes(for motif: MotifKind) -> [MotifStroke] {
+        if let cached = strokeCache[motif] { return cached }
+        let built = makeStrokes(for: motif)
+        strokeCache[motif] = built
+        return built
+    }
+
+    private static func makeStrokes(for motif: MotifKind) -> [MotifStroke] {
         switch motif {
         case .lotusDot: return lotus(petals: 8, rings: 2)
         case .simpleFlower: return simpleFlower()

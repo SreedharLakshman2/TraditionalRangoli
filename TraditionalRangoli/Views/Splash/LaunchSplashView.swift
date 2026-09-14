@@ -4,7 +4,6 @@ struct LaunchSplashView: View {
     var onFinished: () -> Void
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.horizontalSizeClass) private var sizeClass
-    @EnvironmentObject private var language: LanguageStore
     @State private var drawn: CGFloat = 0
     @State private var glow = false
     @State private var appear = false
@@ -24,10 +23,10 @@ struct LaunchSplashView: View {
                         .shadow(color: RangoliColor.gold.opacity(0.3), radius: 18)
                 }
                 VStack(spacing: 8) {
-                    Text(language.t("appName"))
+                    Text(RangoliColor.brand)
                         .font(RangoliFont.display(30))
                         .foregroundStyle(RangoliColor.ink)
-                    Text(language.t("tagline"))
+                    Text(RangoliColor.launchTagline)
                         .font(RangoliFont.body(15))
                         .foregroundStyle(RangoliColor.muted)
                 }
@@ -36,7 +35,7 @@ struct LaunchSplashView: View {
 
             studioFooter
                 .opacity(appear ? 1 : 0)
-                .animation(reduceMotion ? nil : .easeOut(duration: 0.45).delay(0.35), value: appear)
+                .animation(reduceMotion ? nil : .easeOut(duration: 0.28).delay(0.12), value: appear)
                 .padding(.bottom, 36)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
         }
@@ -44,22 +43,22 @@ struct LaunchSplashView: View {
             appear = true
             if reduceMotion {
                 drawn = 1
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.55) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.28) {
                     onFinished()
                 }
                 return
             }
-            withAnimation(.easeInOut(duration: 0.7)) {
+            withAnimation(.easeInOut(duration: 0.4)) {
                 drawn = 1
             }
             withAnimation(.easeInOut(duration: 1.0).repeatForever(autoreverses: true)) {
                 glow = true
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.95) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.45) {
                 onFinished()
             }
         }
-        .accessibilityLabel("\(language.t("appName")). Sreeo Studio. \(RangoliColor.copyright)")
+        .accessibilityLabel("\(RangoliColor.brand). Sreeo Studio. \(RangoliColor.copyright)")
     }
 
     private var studioFooter: some View {

@@ -115,7 +115,7 @@ enum BrowseCollection: String, CaseIterable, Identifiable {
     }
 }
 
-enum MotifKind: String, Codable {
+enum MotifKind: String, Codable, Hashable {
     case lotusDot, simpleFlower, peacock, diya, pulli, spiral, eightPetal
     case geometricStar, festivalFlower, mandala, butterfly, pongalPot
     case sikkuKnot, onamPookalam, sunBurst, mangoLeaf

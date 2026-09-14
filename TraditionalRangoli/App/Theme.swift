@@ -173,6 +173,7 @@ enum RangoliColor {
     static var cardWash: Color { palette.cardWash }
 
     static let brand = "Learn Kolam"
+    static let launchTagline = "Tamil pulli and sikku, taught"
     static let company = "Sai Laksha Technologies"
     static let studio = "Sreeo Studio"
     static let developer = "Sreedhar Lakshmanan"

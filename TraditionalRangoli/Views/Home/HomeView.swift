@@ -5,6 +5,7 @@ struct HomeView: View {
     @EnvironmentObject private var settings: SettingsStore
     @EnvironmentObject private var language: LanguageStore
     @Environment(\.horizontalSizeClass) private var sizeClass
+    @State private var animateLesson = false
     private let lesson = PatternCatalog.today
 
     var body: some View {
@@ -23,6 +24,11 @@ struct HomeView: View {
         .background(Color.clear)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .navigationBar)
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                animateLesson = true
+            }
+        }
     }
 
     private var header: some View {
@@ -67,7 +73,7 @@ struct HomeView: View {
                         Spacer()
                         MetaChip(text: pattern.family.localizedTitle(language.language))
                     }
-                    RangoliPreview(motif: pattern.motif, animate: true)
+                    RangoliPreview(motif: pattern.motif, animate: animateLesson)
                         .frame(height: sizeClass == .regular ? 240 : 168)
                         .frame(maxWidth: .infinity)
                         .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
