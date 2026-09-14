@@ -49,8 +49,8 @@ final class LocalizationChromeTests: XCTestCase {
         XCTAssertFalse(chinese.lowercased().contains("pulli"))
     }
 
-    func testEnglishAppNameIsTamilKolamLessons() {
-        XCTAssertEqual(L10n.string("appName", .english), "Tamil Kolam Lessons")
+    func testEnglishAppNameIsLearnKolam() {
+        XCTAssertEqual(L10n.string("appName", .english), "Learn Kolam")
         XCTAssertNotEqual(L10n.string("appName", .tamil), L10n.string("appName", .english))
         XCTAssertNotEqual(L10n.string("nextLessons", .chinese), L10n.string("nextLessons", .english))
     }

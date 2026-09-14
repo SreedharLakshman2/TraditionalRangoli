@@ -16,7 +16,7 @@ LANGS = [
 ]
 
 EN = {
-    "appName": "Tamil Kolam Lessons",
+    "appName": "Learn Kolam",
     "tagline": "Tamil pulli and sikku, taught",
     "tabHome": "Home",
     "tabExplore": "Explore",
@@ -40,7 +40,7 @@ EN = {
     "settings": "Settings",
     "support": "Support",
     "privacy": "Privacy Policy",
-    "rateApp": "Rate Tamil Kolam Lessons",
+    "rateApp": "Rate Learn Kolam",
     "onboard1Title": "Tamil kolam, taught",
     "onboard1Body": "Pulli and sikku are Tamil courtyard writing — rice flour on clay, not a coloring book.",
     "onboard2Title": "Stroke by stroke",
@@ -148,8 +148,8 @@ EN = {
     "themeDeepavaliGold": "Deepavali gold",
     "themeTerracottaClay": "Terracotta clay",
     "about": "About",
-    "aboutApp": "Tamil Kolam Lessons is a courtyard teacher for pulli and sikku. Home is today's lesson. Artwork stays on this device.",
-    "adsNote": "Ads keep Tamil Kolam Lessons free.",
+    "aboutApp": "Learn Kolam is a courtyard teacher for pulli and sikku. Home is today's lesson. Artwork stays on this device.",
+    "adsNote": "Ads keep Learn Kolam free.",
     "nextLessons": "Coming lessons",
     "studioLockedTitle": "Studio opens after a lesson",
     "studioLockedSub": "Finish Learn Step-by-Step once. Then you can draw freely.",

@@ -1,8 +1,8 @@
-# Tamil Kolam Lessons
+# Learn Kolam
 
 A Tamil kolam course for iPhone and iPad. First launch is today's lesson. The studio opens after you finish one guided lesson. Built with SwiftUI.
 
-Open **`TraditionalRangoli.xcodeproj`** and run the **TraditionalRangoli** scheme. Display name: **Tamil Kolam Lessons**.
+Open **`TraditionalRangoli.xcodeproj`** and run the **TraditionalRangoli** scheme. Display name: **Learn Kolam**.
 
 ## Requirements
 

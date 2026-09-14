@@ -1,6 +1,6 @@
-# Tamil Kolam Lessons — App Store listing
+# Learn Kolam — App Store listing
 
-**Name:** Tamil Kolam Lessons  
+**Name:** Learn Kolam  
 **Subtitle:** Today's pulli, taught  
 **Bundle ID:** com.sreedhar.TraditionalRangoli  
 **Category:** Education (secondary: Lifestyle)  
@@ -13,7 +13,7 @@ First launch is today's Tamil kolam lesson — not a blank canvas. Trace pulli s
 
 ## Description
 
-Tamil Kolam Lessons is a course, not a rangoli sketchpad.
+Learn Kolam is a course, not a rangoli sketchpad.
 
 The first screen is today's lesson: a Tamil name, why that kolam is drawn at the door, the pulli count, and Learn Step-by-Step. There is no Create tab and no freehand studio until you finish one guided lesson. Home is the course — coming lessons are listed under today, not a pattern gallery.
 
@@ -36,7 +36,7 @@ Sai Laksha Technologies
 
 ## Keywords
 
-kolam,pulli,sikku,tamil,lesson,pongal,onam,deepavali,education,trace
+learn,kolam,pulli,sikku,tamil,lesson,pongal,onam,deepavali,education,trace
 
 ## Support URL
 
@@ -58,7 +58,7 @@ Screenshots: upload `AppStore/Screenshots/iphone-6.9/` (1320×2868) and `AppStor
 
 ### 4.3 uniqueness (Resolution Center)
 
-This binary is Tamil Kolam Lessons, an original SwiftUI course by Sreedhar Lakshmanan / Sai Laksha Technologies — not a template and not a white-label. It is the only kolam app on this account. First launch is today's guided lesson. Create, freehand, and symmetry stay locked until one lesson is finished. Home is a numbered course, not a pattern shop. It is not a blank symmetry canvas or a photo coloring pack.
+This binary is Learn Kolam, an original SwiftUI course by Sreedhar Lakshmanan / Sai Laksha Technologies — not a template and not a white-label. It is the only kolam app on this account. First launch is today's guided lesson. Create, freehand, and symmetry stay locked until one lesson is finished. Home is a numbered course, not a pattern shop. It is not a blank symmetry canvas or a photo coloring pack.
 
 ## Privacy nutrition label (App Store Connect)
 

@@ -350,7 +350,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TraditionalRangoli/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Tamil Kolam Lessons";
+				INFOPLIST_KEY_CFBundleDisplayName = "Learn Kolam";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -386,7 +386,7 @@
 				ENABLE_PREVIEWS = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TraditionalRangoli/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Tamil Kolam Lessons";
+				INFOPLIST_KEY_CFBundleDisplayName = "Learn Kolam";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

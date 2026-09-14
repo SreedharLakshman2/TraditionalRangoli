@@ -102,7 +102,7 @@ struct CompletionView: View {
                 try? data.write(to: url)
                 shareURL = url
             }
-            ReviewPrompt.recordRangoliCompleted()
+            ReviewPrompt.recordLessonCompleted()
             AdsManager.shared.showInterstitialAfterRangoli {
                 ReviewPrompt.askIfAppropriate()
             }

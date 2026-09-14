@@ -1,13 +1,13 @@
-# Privacy Policy — Tamil Kolam Lessons
+# Privacy Policy — Learn Kolam
 
 **Last updated:** September 14, 2026  
-**App name:** Tamil Kolam Lessons  
+**App name:** Learn Kolam  
 **Developer:** Sai Laksha Technologies  
 **Bundle ID:** com.sreedhar.TraditionalRangoli  
 
 ## Overview
 
-Tamil Kolam Lessons is a Tamil kolam course for iPhone and iPad. Your drawings, favorites, and progress stay **on your device**. The app does not require an account. The app is free and shows **third-party ads**. Sai Laksha Technologies publishes it under the Sreeo Studio brand.
+Learn Kolam is a Tamil kolam course for iPhone and iPad. Your drawings, favorites, and progress stay **on your device**. The app does not require an account. The app is free and shows **third-party ads**. Sai Laksha Technologies publishes it under the Sreeo Studio brand.
 
 ## Information stored on your device
 
@@ -23,7 +23,7 @@ This is **not** sent to Sai Laksha Technologies.
 
 ## App ratings
 
-After you complete a few lessons, or if you tap **Rate Tamil Kolam Lessons** in Profile, the app may show Apple’s in-app rating card (StoreKit). We do not receive your rating. Apple limits how often that card can appear.
+After you complete a few lessons, or if you tap **Rate Learn Kolam** in Profile, the app may show Apple’s in-app rating card (StoreKit). We do not receive your rating. Apple limits how often that card can appear.
 
 ## Advertising
 

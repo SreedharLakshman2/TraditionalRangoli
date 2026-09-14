@@ -7,7 +7,7 @@
 	<key>GADDelayAppMeasurementInit</key>
 	<true/>
 	<key>NSUserTrackingUsageDescription</key>
-	<string>This allows Tamil Kolam Lessons to show relevant ads that help keep the app free.</string>
+	<string>This allows Learn Kolam to show relevant ads that help keep the app free.</string>
 	<key>UILaunchScreen</key>
 	<dict>
 		<key>UIColorName</key>

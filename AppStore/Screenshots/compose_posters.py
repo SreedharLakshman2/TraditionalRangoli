@@ -374,7 +374,7 @@ def compose(spec: dict, canvas_size: tuple[int, int], folder: str) -> Image.Imag
     foot = brand_font(max(18, int(W * 0.022)))
     ImageDraw.Draw(canvas).text(
         (W / 2, H - int(H * 0.028)),
-        "Tamil Kolam Lessons   ·   Sai Laksha Technologies",
+        "Learn Kolam   ·   Sai Laksha Technologies",
         font=foot,
         fill=(255, 255, 255, 230),
         anchor="ms",

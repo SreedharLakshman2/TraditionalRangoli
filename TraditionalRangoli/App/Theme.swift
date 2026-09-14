@@ -172,14 +172,21 @@ enum RangoliColor {
     static var onAccent: Color { palette.onAccent }
     static var cardWash: Color { palette.cardWash }
 
-    static let brand = "Tamil Kolam Lessons"
+    static let brand = "Learn Kolam"
     static let company = "Sai Laksha Technologies"
     static let studio = "Sreeo Studio"
     static let developer = "Sreedhar Lakshmanan"
     static let copyright = "© 2026 Sai Laksha Technologies"
+    /// App Store Connect Apple ID. Empty until the app is on the store; Rate then uses the in-app card.
+    static let appStoreID = ""
     static let supportURL = URL(string: "https://sreedharlakshman2.github.io/traditional-rangoli/")!
     static let privacyURL = URL(string: "https://sreedharlakshman2.github.io/traditional-rangoli/privacy.html")!
     static let marketingURL = URL(string: "https://sreedharlakshman2.github.io")!
+
+    static var writeReviewURL: URL? {
+        guard appStoreID.isEmpty == false else { return nil }
+        return URL(string: "https://apps.apple.com/app/id\(appStoreID)?action=write-review")
+    }
 
     static let studioTiles: [Color] = [.cyan, .purple, .pink, .orange]
     static let studioWordmark = LinearGradient(

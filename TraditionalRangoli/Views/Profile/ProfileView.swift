@@ -1,3 +1,4 @@
+import StoreKit
 import SwiftUI
 
 struct ProfileView: View {
@@ -5,6 +6,8 @@ struct ProfileView: View {
     @EnvironmentObject private var artworks: ArtworkStore
     @EnvironmentObject private var language: LanguageStore
     @Environment(\.horizontalSizeClass) private var sizeClass
+    @Environment(\.openURL) private var openURL
+    @Environment(\.requestReview) private var requestReview
     @State private var languageQuery = ""
 
     var body: some View {
@@ -213,7 +216,12 @@ struct ProfileView: View {
             Divider()
             Button {
                 Haptics.tap(settings)
-                ReviewPrompt.requestReview()
+                guard !ScreenshotLaunch.isActive else { return }
+                if let url = RangoliColor.writeReviewURL {
+                    openURL(url)
+                } else {
+                    requestReview()
+                }
             } label: {
                 HStack {
                     Text(language.t("rateApp"))
